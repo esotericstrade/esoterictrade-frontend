@@ -1,8 +1,16 @@
-import { AppleOutlined, GoogleOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Divider, Form, Input, Typography, message } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { authService } from "@/utils/api/auth/service";
+import { AppleOutlined, GoogleOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Form,
+  Input,
+  Typography,
+  message,
+} from "antd";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context";
 
 const { Title, Text, Link } = Typography;
@@ -11,16 +19,19 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { setUser } = useAuthContext();
 
-  const onFinish = async (values: { username_or_email: string; password: string }) => {
+  const onFinish = async (values: {
+    username_or_email: string;
+    password: string;
+  }) => {
     setLoading(true);
     try {
       const response = await authService.login({
         username_or_email: values.username_or_email,
         password: values.password,
       });
-      
+
       setUser(response.user);
-      
+
       message.success("Login successful!");
       navigate("/dashboard");
     } catch (error) {
@@ -59,7 +70,14 @@ const SignIn = () => {
             Don't have an account? <Link href="/auth/signup">Sign up</Link>
           </Text>
 
-          <Form layout="vertical" onFinish={onFinish}>
+          <Form
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={{
+              username_or_email: "admin",
+              password: "Passw0rd",
+            }}
+          >
             <Form.Item
               label="Email address or user name"
               name="username_or_email"
@@ -89,7 +107,13 @@ const SignIn = () => {
             </div>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block size="large" loading={loading}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                size="large"
+                loading={loading}
+              >
                 Log in
               </Button>
             </Form.Item>
