@@ -1,0 +1,9 @@
+{
+  "cSpell.words": ["tradeco"],
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#604dd7",
+    "statusBar.foreground": "#ffffff",
+    "titleBar.activeBackground": "#604dd7",
+    "titleBar.activeForeground": "#ffffff"
+  }
+}

@@ -1,15 +1,29 @@
 import MainLayout from "@/components/MainLayout";
 import { useAuthContext } from "@/Pages/Auth/context";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Spin } from "antd";
 
 const PrivateRoutesWrapper = () => {
-  const { user } = useAuthContext();
-  console.log("🚀 ~ PrivateRoutesWrapper ~ user:", user);
+  const { user, loading } = useAuthContext();
+  const location = useLocation();
 
-  const redirect = window.location.pathname;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
-  if (!user)
-    return <Navigate to={`/auth?redirect=${encodeURIComponent(redirect)}`} />;
+  if (!user) {
+    return (
+      <Navigate 
+        to="/auth/signin" 
+        state={{ from: location }} 
+        replace 
+      />
+    );
+  }
 
   return (
     <MainLayout>

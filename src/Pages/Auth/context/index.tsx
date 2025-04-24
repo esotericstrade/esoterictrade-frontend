@@ -1,13 +1,24 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { authService } from "@/utils/api/auth/service";
+import { userService } from "@/utils/api/user/service";
 
 type TUser = {
-  id: string;
-  name: string;
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: "admin" | "user";
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 };
 
 type TAuthContext = {
   user: null | TUser;
+  setUser: (user: TUser | null) => void;
+  loading: boolean;
   onLogout: () => void;
 };
 
@@ -16,12 +27,32 @@ const AuthContext = createContext<TAuthContext | undefined>(undefined);
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useLocalStorage<TUser | null>("user", {
-    id: "1234",
-    name: "Girish Sawant",
-  });
+  const [user, setUser] = useLocalStorage<TUser | null>("user", null);
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is authenticated on page load
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (authService.isAuthenticated()) {
+        try {
+          // If we have a token, fetch the current user profile
+          const currentUser = await userService.getCurrentProfile();
+          setUser(currentUser);
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+          // If token is invalid, clear it
+          authService.logout();
+          setUser(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
 
   const onLogout = () => {
+    authService.logout();
     setUser(null);
   };
 
@@ -29,6 +60,8 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     <AuthContext.Provider
       value={{
         user,
+        setUser,
+        loading,
         onLogout,
       }}
     >

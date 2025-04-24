@@ -38,12 +38,12 @@ export const authService = {
   logout: (): void => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    // Redirect to login page or trigger some event
-    window.location.href = "/auth/login";
+    localStorage.removeItem("user");
   },
 
   // Check if user is logged in
   isAuthenticated: (): boolean => {
-    return !!localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
+    return !!token;
   },
 };
