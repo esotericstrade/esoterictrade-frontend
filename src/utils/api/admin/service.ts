@@ -1,3 +1,4 @@
+// src/utils/api/admin/service.ts
 import { apiClient } from "../apiClient";
 
 export const adminService = {
@@ -5,11 +6,20 @@ export const adminService = {
   getAllUsers: async (
     page: number = 1,
     limit: number = 20
-  ): Promise<PaginatedResponse<User>> => {
-    return await apiClient.get<PaginatedResponse<User>>(
-      `/api/users/?page=${page}&limit=${limit}`
-    );
+  ): Promise<PaginatedResponse<User> | any> => {
+    try {
+      const response = await apiClient.get<PaginatedResponse<User> | any>(
+        `/api/users/?page=${page}&limit=${limit}`
+      );
+      
+      console.log('Raw API response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error in getAllUsers:', error);
+      throw error;
+    }
   },
+
 
   // Get user by username (admin only)
   getUserByUsername: async (username: string): Promise<User> => {
