@@ -5,15 +5,15 @@ import SignUp from "./components/SignUp";
 
 export const authRoutes: RouteObject[] = [
   {
-    path: "/signin",
+    path: "signin",
     element: <SignIn />,
   },
   {
-    path: "/signup",
+    path: "signup",
     element: <SignUp />,
   },
   {
-    path: "/forgot-password",
+    path: "forgot-password",
     element: <ForgotPassword />,
   },
   {
