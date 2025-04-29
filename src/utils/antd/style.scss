@@ -42,3 +42,29 @@
     }
   }
 }
+
+.tradeco-table {
+  .ant-table {
+    .ant-table-container {
+      @apply border border-gray-500/[0.35] rounded-lg overflow-clip;
+      .ant-table-content {
+        table {
+          @apply overflow-hidden;
+
+          thead {
+            th {
+              @apply p-2 px-3 text-sm text-gray-800 font-medium bg-primary-50 border-b border-gray-500/[0.35];
+            }
+          }
+          tbody {
+            @apply overflow-hidden;
+
+            td {
+              @apply p-2 px-3 text-sm text-gray-600 font-normal;
+            }
+          }
+        }
+      }
+    }
+  }
+}

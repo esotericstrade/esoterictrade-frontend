@@ -32,4 +32,7 @@ export const antdConfig: ConfigProviderProps = {
   message: {
     className: "tradeco-message",
   },
+  table: {
+    className: "tradeco-table",
+  },
 };
