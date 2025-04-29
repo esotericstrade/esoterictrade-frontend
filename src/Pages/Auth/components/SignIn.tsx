@@ -1,14 +1,7 @@
+import toaster from "@/components/toaster";
 import { authService } from "@/utils/api/auth/service";
 import { AppleOutlined, GoogleOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Checkbox,
-  Divider,
-  Form,
-  Input,
-  Typography,
-  message,
-} from "antd";
+import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context";
@@ -32,11 +25,12 @@ const SignIn = () => {
 
       setUser(response.user);
 
-      message.success("Login successful!");
+      toaster.success("Login successful!");
       navigate("/dashboard");
-    } catch (error) {
-      console.error("Login failed:", error);
-      message.error("Login failed. Please check your credentials.");
+    } catch (error: unknown) {
+      const errorMessage =
+        (error as { message?: string })?.message || "Login failed!";
+      toaster.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -75,7 +69,7 @@ const SignIn = () => {
             onFinish={onFinish}
             initialValues={{
               username_or_email: "admin",
-              password: "Passw0rd",
+              password: "Passw0rd.",
             }}
           >
             <Form.Item
