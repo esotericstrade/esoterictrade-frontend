@@ -5,17 +5,19 @@
 /**
  * Represents a subscription in the system
  */
-interface Subscription {
-  id: number;
-  user_id: number;
+type Subscription = {
+  actor: Actor;
   actor_id: number;
-  quantity: number;
-  start_date: string;
-  end_date: string;
+  name: string;
+  created_at: Date;
+  custom_parameters: null;
+  effective_parameters: Parameters;
+  id: number;
   is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+  quantity: number;
+  updated_at: Date;
+  user_id: number;
+};
 
 /**
  * Represents the request body for creating a subscription

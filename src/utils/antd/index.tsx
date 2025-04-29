@@ -29,4 +29,7 @@ export const antdConfig: ConfigProviderProps = {
   menu: {
     className: "tradeco-menu",
   },
+  message: {
+    className: "tradeco-message",
+  },
 };

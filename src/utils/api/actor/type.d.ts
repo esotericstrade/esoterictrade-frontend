@@ -1,8 +1,15 @@
+type ActorParameters = {
+  ltp: string;
+  stoploss: string;
+  target: string;
+};
+
 interface Actor {
   id: number;
+  name: string;
   strategy_id: number;
   instrument_name: string;
-  parameters: Record<string, any>;
+  parameters: ActorParameters;
   created_at: string;
   updated_at: string;
 }
@@ -10,14 +17,14 @@ interface Actor {
 interface CreateActorRequest {
   strategy_id: number;
   instrument_name: string;
-  parameters: Record<string, any>;
+  parameters: ActorParameters;
 }
 
 interface UpdateActorRequest {
   name?: string;
   description?: string;
   instrument?: string;
-  parameters?: Record<string, any>;
+  parameters?: ActorParameters;
 }
 
 interface ActorRunRequest {

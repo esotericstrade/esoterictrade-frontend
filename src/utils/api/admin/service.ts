@@ -11,15 +11,14 @@ export const adminService = {
       const response = await apiClient.get<PaginatedResponse<User> | any>(
         `/api/users/?page=${page}&limit=${limit}`
       );
-      
-      console.log('Raw API response:', response);
+
+      console.log("Raw API response:", response);
       return response;
     } catch (error) {
-      console.error('Error in getAllUsers:', error);
+      console.error("Error in getAllUsers:", error);
       throw error;
     }
   },
-
 
   // Get user by username (admin only)
   getUserByUsername: async (username: string): Promise<User> => {
