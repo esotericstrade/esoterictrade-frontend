@@ -1,10 +1,11 @@
 // src/Router/Routes.tsx
 import Auth from "@/Pages/Auth";
 import Dashboard from "@/Pages/Dashboard";
-import Users from "@/Pages/Users";
-import { Navigate } from "react-router-dom";
+import Subscription from "@/Pages/Subscription";
+import Users from "@/Pages/Users/components/UserList";
 import { authService } from "@/utils/api/auth/service";
 import { RouteObject } from "react-router";
+import { Navigate } from "react-router-dom";
 
 const ConditionalRedirect = () => {
   const isAuthenticated = authService.isAuthenticated();
@@ -29,9 +30,14 @@ export const PUBLIC_ROUTES: RouteObject[] = [
 export const PRIVATE_ROUTES: RouteObject[] = [
   { path: "/dashboard", element: <Dashboard /> },
   {
-    path: "/users",
+    path: "/users/*",
     element: <Users />,
   },
+  {
+    path: "/subscription/*",
+    element: <Subscription />,
+  },
+
   {
     path: "*",
     element: <div>404</div>,

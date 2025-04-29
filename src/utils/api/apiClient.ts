@@ -126,8 +126,6 @@ class ApiClient {
   public logout(): void {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    // Redirect to login page
-    window.location.href = "/auth/login";
   }
 }
 

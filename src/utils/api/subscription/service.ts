@@ -15,12 +15,18 @@ export const subscriptionService = {
 
   // Get user subscriptions
   getUserSubscriptions: async (
-    userId: number,
+    userId: string,
     activeOnly: boolean = false
-  ): Promise<Subscription[]> => {
-    return await apiClient.get<Subscription[]>(
-      `/api/subscriptions/user/${userId}?active_only=${activeOnly}`
-    );
+  ): Promise<{
+    subscriptions: Subscription[];
+    active: number;
+    total: number;
+  }> => {
+    return await apiClient.get<{
+      subscriptions: Subscription[];
+      active: number;
+      total: number;
+    }>(`/api/subscriptions/user/${userId}?active_only=${activeOnly}`);
   },
 
   // Get my subscriptions
