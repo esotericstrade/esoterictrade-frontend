@@ -77,7 +77,7 @@ const UserSubscription = () => {
 
   return (
     <section>
-      <div className="flex justify-between items-center my-4">
+      <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Subscriptions</h2>
         <div className="flex gap-2 h-fit">
           <Tag color="green">

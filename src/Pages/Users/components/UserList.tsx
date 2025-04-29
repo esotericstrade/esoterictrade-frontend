@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
-import { Button, message, Modal, Space, Spin, Table, Tag } from "antd";
+import { Button, message, Modal, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -258,29 +258,20 @@ const Users = () => {
         </Button>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        {/* Debug info */}
-        <div className="mb-4 text-sm">
-          <p>Loading: {loading ? "Yes" : "No"}</p>
-          <p>Users count: {users.length}</p>
-        </div>
-
-        <Spin spinning={loading}>
-          <Table
-            columns={columns}
-            dataSource={users}
-            rowKey="id"
-            onRow={onRow}
-            pagination={{
-              ...pagination,
-              showSizeChanger: true,
-              showTotal: (total, range) =>
-                `${range[0]}-${range[1]} of ${total} items`,
-            }}
-            onChange={handleTableChange}
-          />
-        </Spin>
-      </div>
+      <Table
+        loading={loading}
+        columns={columns}
+        dataSource={users}
+        rowKey="id"
+        onRow={onRow}
+        pagination={{
+          ...pagination,
+          showSizeChanger: true,
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`,
+        }}
+        onChange={handleTableChange}
+      />
 
       <UserFormModal
         visible={modalVisible}
