@@ -7,83 +7,41 @@ import {
   PlusOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Modal, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserFormModal from "./UserFormModal";
 
+const PAGE_LIMIT = 10;
+
 const Users = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Partial<User> | undefined>(
     undefined
   );
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
-  });
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
 
-  const fetchUsers = async (page = 1, limit = 10) => {
-    setLoading(true);
-    try {
-      const response = await adminService.getAllUsers(page, limit);
-      console.log("API Response:", response); // Debug: Log full response
-
-      // Handle different response formats
-      if (Array.isArray(response)) {
-        // If response is directly an array of users
-        setUsers(response);
-        setPagination({
-          ...pagination,
-          total: response.length,
-        });
-      } else if (response && typeof response === "object") {
-        // If response is a paginated object
-        if (Array.isArray(response.data)) {
-          setUsers(response.data);
-          setPagination({
-            current: response.page || 1,
-            pageSize: response.limit || 10,
-            total: response.total || response.data.length,
-          });
-        } else if (response.users && Array.isArray(response.users)) {
-          // Alternative structure some APIs use
-          setUsers(response.users);
-          setPagination({
-            current: response.page || 1,
-            pageSize: response.limit || 10,
-            total: response.total || response.users.length,
-          });
-        } else {
-          // If we can't find an array in the expected places, log error
-          console.error("Unexpected response structure:", response);
-          message.error("Received unexpected data format from server");
-        }
-      } else {
-        console.error("Invalid response:", response);
-        message.error("Received invalid data from server");
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      message.error("Failed to fetch users");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const handleTableChange = (pagination: any) => {
-    fetchUsers(pagination.current, pagination.pageSize);
-  };
+  const { data, isFetching } = useQuery({
+    queryKey: ["users", currentPage],
+    queryFn: () => adminService.getAllUsers(currentPage, PAGE_LIMIT),
+    initialData: {
+      pagination: {
+        limit: PAGE_LIMIT,
+        page: currentPage,
+        total: 0,
+        pages: 0,
+      },
+      users: [],
+    },
+  });
 
   const handleAddUser = () => {
     setSelectedUser(undefined);
@@ -113,7 +71,6 @@ const Users = () => {
         message.success("User added successfully");
       }
       setModalVisible(false);
-      fetchUsers(pagination.current, pagination.pageSize);
     } catch (error) {
       console.error("Error saving user:", error);
       message.error("Failed to save user");
@@ -126,7 +83,9 @@ const Users = () => {
     try {
       await adminService.deactivateUser(userId);
       message.success("User deactivated successfully");
-      fetchUsers(pagination.current, pagination.pageSize);
+      queryClient.invalidateQueries({
+        queryKey: ["users", currentPage],
+      });
     } catch (error) {
       console.error("Error deactivating user:", error);
       message.error("Failed to deactivate user");
@@ -143,7 +102,9 @@ const Users = () => {
         try {
           await adminService.deleteUserById(userId);
           message.success("User deleted successfully");
-          fetchUsers(pagination.current, pagination.pageSize);
+          queryClient.invalidateQueries({
+            queryKey: ["users", currentPage],
+          });
         } catch (error) {
           console.error("Error deleting user:", error);
           message.error("Failed to delete user");
@@ -259,18 +220,22 @@ const Users = () => {
       </div>
 
       <Table
-        loading={loading}
+        loading={isFetching}
         columns={columns}
-        dataSource={users}
+        dataSource={data.users}
         rowKey="id"
         onRow={onRow}
         pagination={{
-          ...pagination,
-          showSizeChanger: true,
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} items`,
+          onChange: (page) => {
+            setCurrentPage(page);
+          },
+          total: data.pagination.total,
+          pageSize: PAGE_LIMIT,
+          current: currentPage,
+          showTotal(total, range) {
+            return `Showing ${range[0]}-${range[1]} of ${total} users`;
+          },
         }}
-        onChange={handleTableChange}
       />
 
       <UserFormModal

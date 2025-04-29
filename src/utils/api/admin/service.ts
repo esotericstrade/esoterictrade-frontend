@@ -6,13 +6,11 @@ export const adminService = {
   getAllUsers: async (
     page: number = 1,
     limit: number = 20
-  ): Promise<PaginatedResponse<User> | any> => {
+  ): Promise<PaginatedResponse<{ users: User[] }>> => {
     try {
-      const response = await apiClient.get<PaginatedResponse<User> | any>(
-        `/api/users/?page=${page}&limit=${limit}`
-      );
-
-      console.log("Raw API response:", response);
+      const response = await apiClient.get<
+        PaginatedResponse<{ users: User[] }>
+      >(`/api/users/?page=${page}&limit=${limit}`);
       return response;
     } catch (error) {
       console.error("Error in getAllUsers:", error);
