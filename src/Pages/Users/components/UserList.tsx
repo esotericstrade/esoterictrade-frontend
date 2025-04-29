@@ -1,14 +1,9 @@
 // src/Pages/Users/index.tsx
 import { adminService } from "@/utils/api/admin/service";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  LockOutlined,
-  PlusOutlined,
-  UnlockOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
+import { LockKey, LockKeyOpen, Pencil, Trash } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, message, Modal, Space, Table, Tag } from "antd";
+import { Button, message, Modal, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -175,37 +170,36 @@ const Users = () => {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <Space size="middle" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="flex items-center gap-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button
-            icon={<EditOutlined />}
-            size="small"
             type="primary"
+            icon={<Pencil weight="bold" />}
             onClick={() => handleEditUser(record)}
           />
           {record.is_active ? (
             <Button
-              icon={<LockOutlined />}
-              size="small"
-              danger
+              className="bg-amber-600 text-white"
+              icon={<LockKey weight="bold" />}
               onClick={() => handleDeactivateUser(record.id)}
             />
           ) : (
             <Button
-              icon={<UnlockOutlined />}
-              size="small"
-              type="default"
+              className="bg-amber-600 text-white"
+              icon={<LockKeyOpen weight="bold" />}
               onClick={() => {
                 /* Handle activate */
               }}
             />
           )}
           <Button
-            icon={<DeleteOutlined />}
-            size="small"
-            danger
+            className="bg-rose-600 text-white"
+            icon={<Trash weight="bold" />}
             onClick={() => handleDeleteUser(record.id)}
           />
-        </Space>
+        </div>
       ),
     },
   ];
@@ -225,6 +219,7 @@ const Users = () => {
         dataSource={data.users}
         rowKey="id"
         onRow={onRow}
+        rowClassName={"cursor-pointer"}
         pagination={{
           onChange: (page) => {
             setCurrentPage(page);
