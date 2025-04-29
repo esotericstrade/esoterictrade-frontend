@@ -3,7 +3,7 @@ import { ConfigProvider } from "antd";
 import { RouterProvider } from "react-router-dom";
 import AuthProvider from "./Pages/Auth/context";
 import router from "./Router";
-import { antdConfig } from "./utils";
+import { antdConfig } from "./utils/antd";
 
 const queryClient = new QueryClient();
 
