@@ -9,9 +9,7 @@ const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     <Layout className="grid grid-rows-[auto_1fr] grid-cols-[auto,1fr] max-h-dvh overflow-hidden">
       <Header />
       <Sidebar />
-      <Layout>
-        <Content>{children}</Content>
-      </Layout>
+      <Content className="p-6 overflow-y-auto">{children}</Content>
     </Layout>
   );
 };
