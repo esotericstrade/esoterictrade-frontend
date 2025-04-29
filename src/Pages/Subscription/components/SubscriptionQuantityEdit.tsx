@@ -1,5 +1,4 @@
-// filepath: /Users/girishsawant/Desktop/Projects/tradeco/src/Pages/Subscription/components/SubscriptionQuantityEdit.tsx
-import toaster from "@/components/toaster";
+import { useToaster } from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InputNumber } from "antd";
@@ -14,6 +13,7 @@ const SubscriptionQuantityEdit = ({
 }) => {
   const [quantity, setQuantity] = useState<number>(record.quantity);
   const queryClient = useQueryClient();
+  const toaster = useToaster();
 
   const subscriptionMutation = useMutation({
     mutationKey: ["updateSubscriptionQuantity"],
@@ -26,11 +26,9 @@ const SubscriptionQuantityEdit = ({
       queryClient.invalidateQueries({
         queryKey: ["userSubscription", userId],
       });
-      console.log("Subscription quantity updated successfully", data);
-      toaster.success("Quantity updated successfully");
+      toaster.success(`Quantity updated to ${data.quantity}`);
     },
-    onError: (error) => {
-      console.error("Error updating subscription quantity", error);
+    onError: () => {
       toaster.error("Error updating quantity");
       // Reset to previous value on error
       setQuantity(record.quantity);

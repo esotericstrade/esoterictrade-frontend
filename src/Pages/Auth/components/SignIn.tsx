@@ -1,4 +1,4 @@
-import toaster from "@/components/toaster";
+import { useToaster } from "@/components/toaster";
 import { authService } from "@/utils/api/auth/service";
 import { AppleOutlined, GoogleOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
@@ -11,6 +11,7 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useAuthContext();
+  const toaster = useToaster();
 
   const onFinish = async (values: {
     username_or_email: string;
@@ -25,7 +26,7 @@ const SignIn = () => {
 
       setUser(response.user);
 
-      toaster.success("Login successful!");
+      toaster.success("Login successful");
       navigate("/dashboard");
     } catch (error: unknown) {
       const errorMessage =

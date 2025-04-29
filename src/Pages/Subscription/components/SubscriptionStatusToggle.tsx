@@ -1,4 +1,4 @@
-import toaster from "@/components/toaster";
+import { useToaster } from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Switch } from "antd";
@@ -11,6 +11,7 @@ const SubscriptionStatusToggle = ({
   userId: string;
 }) => {
   const queryClient = useQueryClient();
+  const toaster = useToaster();
 
   const subscriptionMutation = useMutation({
     mutationKey: ["toggleSubscription"],
@@ -23,11 +24,11 @@ const SubscriptionStatusToggle = ({
       queryClient.invalidateQueries({
         queryKey: ["userSubscription", userId],
       });
-      console.log("Subscription updated successfully", data);
-      toaster.success("Subscription updated successfully");
+      toaster.success(
+        `Subscription ${data.is_active ? "activated" : "deactivated"}`
+      );
     },
-    onError: (error) => {
-      console.error("Error updating subscription", error);
+    onError: () => {
       toaster.error("Error updating subscription");
     },
   });
