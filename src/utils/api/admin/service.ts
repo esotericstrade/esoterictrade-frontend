@@ -10,7 +10,7 @@ export const adminService = {
     try {
       const response = await apiClient.get<
         PaginatedResponse<{ users: User[] }>
-      >(`/api/users/?page=${page}&limit=${limit}`);
+      >(`/api/users?page=${page}&limit=${limit}`);
       return response;
     } catch (error) {
       console.error("Error in getAllUsers:", error);
