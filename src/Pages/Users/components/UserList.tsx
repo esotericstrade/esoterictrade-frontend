@@ -128,7 +128,6 @@ const Users = () => {
       title: "Username",
       dataIndex: "username",
       key: "username",
-      render: (text) => <a>{text}</a>,
     },
     {
       title: "Name",
@@ -164,7 +163,10 @@ const Users = () => {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
-      render: (d) => Array.isArray(d) ? new Date(d[0], d[1] - 1, d[2]).toLocaleDateString() : "Invalid"
+      render: (d) =>
+        Array.isArray(d)
+          ? new Date(d[0], d[1] - 1, d[2]).toLocaleDateString()
+          : "Invalid",
     },
     {
       title: "Actions",
@@ -175,18 +177,21 @@ const Users = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <Button
+            size="small"
             type="primary"
             icon={<Pencil weight="bold" />}
             onClick={() => handleEditUser(record)}
           />
           {record.is_active ? (
             <Button
+              size="small"
               className="bg-amber-600 text-white"
               icon={<LockKey weight="bold" />}
               onClick={() => handleDeactivateUser(record.id)}
             />
           ) : (
             <Button
+              size="small"
               className="bg-amber-600 text-white"
               icon={<LockKeyOpen weight="bold" />}
               onClick={() => {
@@ -195,6 +200,7 @@ const Users = () => {
             />
           )}
           <Button
+            size="small"
             className="bg-rose-600 text-white"
             icon={<Trash weight="bold" />}
             onClick={() => handleDeleteUser(record.id)}
