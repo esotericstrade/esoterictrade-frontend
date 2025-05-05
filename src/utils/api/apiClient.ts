@@ -124,6 +124,8 @@ class ApiClient {
 
   // Method to handle the logout
   public logout(): void {
+    // Clear tokens from local storage
+    localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
   }
