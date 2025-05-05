@@ -51,6 +51,7 @@ const SubscriptionQuantityEdit = ({
 
   return (
     <InputNumber
+      size="small"
       min={1}
       value={quantity}
       onChange={handleQuantityChange}

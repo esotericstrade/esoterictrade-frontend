@@ -35,6 +35,7 @@ const SubscriptionStatusToggle = ({
 
   return (
     <Switch
+      size="small"
       checked={record.is_active}
       loading={subscriptionMutation.isPending}
       onChange={(checked) =>
