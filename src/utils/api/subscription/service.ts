@@ -5,7 +5,7 @@ export const subscriptionService = {
   createSubscription: async (
     data: CreateSubscriptionRequest
   ): Promise<Subscription> => {
-    return await apiClient.post<Subscription>("/api/subscriptions/", data);
+    return await apiClient.post<Subscription>("/api/subscriptions", data);
   },
 
   // Get subscription by ID

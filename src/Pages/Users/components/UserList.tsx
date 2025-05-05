@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserFormModal from "./UserFormModal";
 
-const PAGE_LIMIT = 10;
+const PAGE_LIMIT = 20;
 
 const Users = () => {
   const queryClient = useQueryClient();
@@ -164,7 +164,7 @@ const Users = () => {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
-      render: (date) => new Date(date).toLocaleDateString(),
+      render: (d) => Array.isArray(d) ? new Date(d[0], d[1] - 1, d[2]).toLocaleDateString() : "Invalid"
     },
     {
       title: "Actions",

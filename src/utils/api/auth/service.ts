@@ -4,7 +4,7 @@ export const authService = {
   // Login user
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
     const response = await apiClient.post<LoginResponse>(
-      "/api/users/login",
+      "/api/auth/login",
       credentials
     );
 

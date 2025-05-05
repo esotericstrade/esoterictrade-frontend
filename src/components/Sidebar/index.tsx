@@ -28,6 +28,12 @@ const MENU_ITEMS = [
     href: "/users",
   },
   {
+    key: "actors",
+    icon: Lightning,
+    label: "Actors",
+    href: "/strategies",
+  },
+  {
     key: "strategies",
     icon: Lightning,
     label: "Strategies",
