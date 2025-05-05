@@ -1,3 +1,4 @@
+import { Spinner } from "@phosphor-icons/react";
 import { ConfigProviderProps } from "antd";
 import "./style.scss";
 
@@ -34,5 +35,8 @@ export const antdConfig: ConfigProviderProps = {
   },
   table: {
     className: "tradeco-table",
+  },
+  spin: {
+    indicator: <Spinner className="animate-spin" />,
   },
 };
