@@ -24,6 +24,16 @@ const UserSubscription = () => {
       }
       return subscriptionService.getUserSubscriptions(userId);
     },
+    select: (data) => {
+      return {
+        ...data,
+        subscriptions: data.subscriptions.sort((a, b) => {
+          const nameA = a.actor.instrument_name.toLowerCase();
+          const nameB = b.actor.instrument_name.toLowerCase();
+          return nameA.localeCompare(nameB);
+        }),
+      };
+    },
   });
 
   const columns: ColumnsType<Subscription> = [

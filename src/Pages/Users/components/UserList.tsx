@@ -36,6 +36,16 @@ const Users = () => {
       },
       users: [],
     },
+    select(data) {
+      return {
+        ...data,
+        users: data.users.sort((a: User, b: User) => {
+          const nameA = `${a.first_name} ${a.last_name}`.toLowerCase();
+          const nameB = `${b.first_name} ${b.last_name}`.toLowerCase();
+          return nameA.localeCompare(nameB);
+        }),
+      };
+    },
   });
 
   const handleAddUser = () => {
