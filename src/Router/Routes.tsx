@@ -1,4 +1,5 @@
 // src/Router/Routes.tsx
+import Actors from "@/Pages/Actors";
 import Auth from "@/Pages/Auth";
 import Dashboard from "@/Pages/Dashboard";
 import Subscription from "@/Pages/Subscription";
@@ -37,7 +38,10 @@ export const PRIVATE_ROUTES: RouteObject[] = [
     path: "/subscription/*",
     element: <Subscription />,
   },
-
+  {
+    path: "/actors/*",
+    element: <Actors />,
+  },
   {
     path: "*",
     element: <div>404</div>,

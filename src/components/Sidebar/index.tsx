@@ -32,7 +32,7 @@ const MENU_ITEMS = [
     key: "actors",
     icon: Lightning,
     label: "Actors",
-    href: "/strategies",
+    href: "/actors",
   },
   {
     key: "strategies",
