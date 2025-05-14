@@ -1,5 +1,6 @@
 import { useAuthContext } from "@/Pages/Auth/context";
 import {
+  CardsThree,
   CaretDown,
   ChartBar,
   Cube,
@@ -36,7 +37,7 @@ const MENU_ITEMS = [
   },
   {
     key: "strategies",
-    icon: Lightning,
+    icon: CardsThree,
     label: "Strategies",
     href: "/strategies",
   },
