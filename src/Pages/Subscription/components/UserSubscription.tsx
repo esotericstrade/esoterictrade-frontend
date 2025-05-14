@@ -62,7 +62,7 @@ const UserSubscription = () => {
           <div>
             <Tag color="red">SL:{record.actor.parameters.stoploss}</Tag>
             {record.actor.parameters.ltp && (
-              <Tag color="amber">LTP: {record.actor.parameters.ltp}</Tag>
+              <Tag color="yellow">LTP: {record.actor.parameters.ltp}</Tag>
             )}
             <Tag color="green">Target: {record.actor.parameters.target}</Tag>
           </div>

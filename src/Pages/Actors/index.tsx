@@ -65,7 +65,7 @@ const Actors = () => {
           <div>
             <Tag color="red">SL:&nbsp;{record.parameters.stoploss}</Tag>
             {record.parameters.ltp && (
-              <Tag color="amber">LTP:&nbsp;{record.parameters.ltp}</Tag>
+              <Tag color="yellow">LTP:&nbsp;{record.parameters.ltp}</Tag>
             )}
             <Tag color="green">Target:&nbsp;{record.parameters.target}</Tag>
           </div>
