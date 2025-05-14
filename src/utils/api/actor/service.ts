@@ -6,11 +6,11 @@ export const actorService = {
     limit: number = 20,
     strategyId?: number,
     instrument?: string
-  ): Promise<PaginatedResponse<Actor>> => {
-    let url = `/api/actors/?page=${page}&limit=${limit}`;
+  ) => {
+    let url = `/api/actors?page=${page}&limit=${limit}`;
     if (strategyId) url += `&strategy_id=${strategyId}`;
     if (instrument) url += `&instrument=${instrument}`;
-    return await apiClient.get<PaginatedResponse<Actor>>(url);
+    return await apiClient.get<PaginatedResponse<{ actors: Actor[] }>>(url);
   },
 
   // Get actor by ID

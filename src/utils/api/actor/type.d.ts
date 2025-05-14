@@ -8,6 +8,7 @@ interface Actor {
   id: number;
   name: string;
   strategy_id: number;
+  strategy_name: string;
   instrument_name: string;
   parameters: ActorParameters;
   created_at: string;
