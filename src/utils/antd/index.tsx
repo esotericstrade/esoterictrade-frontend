@@ -23,7 +23,13 @@ export const antdConfig: ConfigProviderProps = {
     },
   },
   form: {
-    requiredMark: false,
+    requiredMark: (labelNode, { required }) => (
+      <>
+        {labelNode}
+        {required && <span className="text-rose-600 ms-0.5">*</span>}
+      </>
+    ),
+
     colon: false,
     className: "tradeco-form",
   },
@@ -35,6 +41,9 @@ export const antdConfig: ConfigProviderProps = {
   },
   table: {
     className: "tradeco-table",
+  },
+  modal: {
+    className: "tradeco-modal",
   },
   spin: {
     indicator: <Spinner className="animate-spin" />,

@@ -1,5 +1,5 @@
 .tradeco-button {
-  @apply h-9 flex justify-center items-center relative px-4 py-3 rounded-full;
+  @apply h-9 flex justify-center items-center relative px-4 py-3 rounded-full shadow-[0.625rem_0.625rem_0.875rem_0_rgb(225,226,228),-0.5rem_-0.5rem_1.125rem_0_rgb(255,255,255)];
 
   &.ant-btn-lg {
     @apply h-16;
@@ -51,6 +51,22 @@
       svg {
         @apply fill-white;
       }
+    }
+  }
+}
+
+.tradeco-modal {
+  .ant-modal-content {
+    @apply rounded-2xl shadow-2xl bg-gray-100 p-2;
+
+    .ant-modal-header {
+      @apply bg-transparent text-center pt-3 pb-2;
+    }
+    .ant-modal-body {
+      @apply px-4 py-3 rounded-2xl bg-white;
+    }
+    .ant-modal-footer {
+      @apply px-4 mb-1;
     }
   }
 }
