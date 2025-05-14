@@ -1,5 +1,5 @@
 // src/Pages/Users/components/UserFormModal.tsx
-import { Modal, Form, Input, Select, Switch, Button } from "antd";
+import { Button, Form, Input, Modal, Select, Switch } from "antd";
 import { useEffect } from "react";
 
 const { Option } = Select;
@@ -41,19 +41,22 @@ const UserFormModal = ({
       title={isEditing ? "Edit User" : "Add New User"}
       open={visible}
       onCancel={onCancel}
-      footer={[
-        <Button key="cancel" onClick={onCancel}>
-          Cancel
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={loading}
-          onClick={handleSubmit}
-        >
-          {isEditing ? "Update" : "Create"}
-        </Button>,
-      ]}
+      footer={
+        <div className="grid grid-cols-2 gap-3">
+          <Button key="cancel" onClick={onCancel}>
+            Cancel
+          </Button>
+
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={handleSubmit}
+          >
+            {isEditing ? "Update" : "Create"}
+          </Button>
+        </div>
+      }
     >
       <Form
         form={form}
@@ -133,21 +136,22 @@ const UserFormModal = ({
             <Input.Password />
           </Form.Item>
         )}
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item label="Role" name="role">
+            <Select>
+              <Option value="user">User</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
+          </Form.Item>
 
-        <Form.Item label="Role" name="role">
-          <Select>
-            <Option value="user">User</Option>
-            <Option value="admin">Admin</Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label="Active Status"
-          name="is_active"
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
+          <Form.Item
+            label="Active Status"
+            name="is_active"
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
+        </div>
       </Form>
     </Modal>
   );
