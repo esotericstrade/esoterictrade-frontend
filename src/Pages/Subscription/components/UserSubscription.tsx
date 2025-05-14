@@ -1,8 +1,10 @@
 import { subscriptionService } from "@/utils/api/subscription/service";
+import { Plus } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
-import { Tag } from "antd";
+import { Button, Tag } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
+import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
 import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 
@@ -88,12 +90,24 @@ const UserSubscription = () => {
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Subscriptions</h2>
-        <div className="flex gap-2 h-fit">
+        <div>
+          <h2 className="text-2xl font-semibold">Subscriptions</h2>
           <Tag color="green">
             Active: {data.active} out of {data.total}
           </Tag>
         </div>
+
+        <AddNewSubscription>
+          {({ setOpen }) => (
+            <Button
+              type="primary"
+              icon={<Plus />}
+              onClick={() => setOpen(true)}
+            >
+              Add New Subscription
+            </Button>
+          )}
+        </AddNewSubscription>
       </div>
 
       <Table

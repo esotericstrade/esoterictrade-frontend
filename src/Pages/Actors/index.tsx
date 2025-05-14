@@ -30,7 +30,6 @@ const Actors = () => {
       actors: [],
     },
   });
-  console.log("🚀 ~ Actors ~ data:", data);
 
   const onRow = (record: Actor) => {
     return {
