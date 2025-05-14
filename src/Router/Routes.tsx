@@ -2,6 +2,7 @@
 import Actors from "@/Pages/Actors";
 import Auth from "@/Pages/Auth";
 import Dashboard from "@/Pages/Dashboard";
+import Strategies from "@/Pages/Strategies";
 import Subscription from "@/Pages/Subscription";
 import Users from "@/Pages/Users/components/UserList";
 import { authService } from "@/utils/api/auth/service";
@@ -41,6 +42,10 @@ export const PRIVATE_ROUTES: RouteObject[] = [
   {
     path: "/actors/*",
     element: <Actors />,
+  },
+  {
+    path: "/strategies/*",
+    element: <Strategies />,
   },
   {
     path: "*",
