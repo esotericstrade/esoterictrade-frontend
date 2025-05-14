@@ -1,13 +1,12 @@
 import { apiClient } from "../apiClient";
 
 export const strategyService = {
-  getAllStrategies: async (
-    page: number = 1,
-    limit: number = 20
-  ): Promise<PaginatedResponse<Strategy>> => {
-    return await apiClient.get<PaginatedResponse<Strategy>>(
-      `/api/strategies/?page=${page}&limit=${limit}`
-    );
+  getAllStrategies: async (page: number = 1, limit: number = 20) => {
+    return await apiClient.get<
+      PaginatedResponse<{
+        strategies: Strategy[];
+      }>
+    >(`/api/strategies?page=${page}&limit=${limit}`);
   },
 
   // Get strategy by ID

@@ -17,6 +17,7 @@ interface Actor {
 
 interface CreateActorRequest {
   strategy_id: number;
+  name: string;
   instrument_name: string;
   parameters: ActorParameters;
 }

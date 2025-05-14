@@ -23,7 +23,7 @@ export const actorService = {
   },
 
   createActor: async (data: CreateActorRequest): Promise<Actor> => {
-    return await apiClient.post<Actor>("/api/actors/", data);
+    return await apiClient.post<Actor>("/api/actors", data);
   },
 
   // Update actor (admin only)
