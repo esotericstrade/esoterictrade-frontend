@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserFormModal from "./UserFormModal";
 
-const PAGE_LIMIT = 20;
+const PAGE_LIMIT = 12;
 
 const Users = () => {
   const queryClient = useQueryClient();
