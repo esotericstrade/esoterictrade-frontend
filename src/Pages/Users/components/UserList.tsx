@@ -122,7 +122,7 @@ const Users = () => {
     return {
       onClick: () => {
         // Handle row click
-        navigate(`/subscription/${record.id}`);
+        navigate(`/subscription/${record.username}/${record.id}`);
       },
     };
   };

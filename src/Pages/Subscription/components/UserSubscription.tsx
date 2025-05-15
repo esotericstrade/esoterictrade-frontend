@@ -1,3 +1,4 @@
+import { adminService } from "@/utils/api/admin/service";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { Plus } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +10,17 @@ import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
 import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 
 const UserSubscription = () => {
-  const { userId } = useParams();
+  const { userId, userName } = useParams();
+
+  const { data: user } = useQuery({
+    queryKey: ["user", userName],
+    queryFn: () => {
+      if (!userName) {
+        throw new Error("User name is required");
+      }
+      return adminService.getUserByUsername(userName);
+    },
+  });
 
   const { data, isFetching } = useQuery({
     queryKey: ["userSubscription", userId],
@@ -91,7 +102,10 @@ const UserSubscription = () => {
     <section>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-2xl font-semibold">Subscriptions</h2>
+          <h2 className="text-2xl font-semibold">
+            Subscriptions
+            {user ? ` of ${user.first_name} ${user.last_name}` : ""}
+          </h2>
           <Tag color="green">
             Active: {data.active} out of {data.total}
           </Tag>

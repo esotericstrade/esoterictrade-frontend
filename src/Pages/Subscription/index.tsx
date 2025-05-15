@@ -4,7 +4,7 @@ import UserSubscription from "./components/UserSubscription";
 const Subscription = () => {
   return (
     <Routes>
-      <Route path=":userId" element={<UserSubscription />} />
+      <Route path=":userName/:userId" element={<UserSubscription />} />
     </Routes>
   );
 };
