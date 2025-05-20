@@ -5,12 +5,17 @@ export const adminService = {
   // Get all users (admin only)
   getAllUsers: async (
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
+    searchQuery: string = ""
   ): Promise<PaginatedResponse<{ users: User[] }>> => {
     try {
+      let url = `/api/users?page=${page}&limit=${limit}`;
+      if (searchQuery.trim()) {
+        url += `&search=${encodeURIComponent(searchQuery.trim())}`;
+      }
       const response = await apiClient.get<
         PaginatedResponse<{ users: User[] }>
-      >(`/api/users?page=${page}&limit=${limit}`);
+      >(url);
       return response;
     } catch (error) {
       console.error("Error in getAllUsers:", error);

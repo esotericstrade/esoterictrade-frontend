@@ -1,12 +1,19 @@
 // src/Pages/Users/index.tsx
 import { adminService } from "@/utils/api/admin/service";
 import { PlusOutlined } from "@ant-design/icons";
-import { LockKey, LockKeyOpen, Pencil, Trash } from "@phosphor-icons/react";
+import {
+  LockKey,
+  LockKeyOpen,
+  MagnifyingGlass,
+  Pencil,
+  Trash,
+} from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, message, Modal, Table, Tag } from "antd";
+import { Button, Input, message, Modal, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDebounceValue } from "usehooks-ts";
 import UserFormModal from "./UserFormModal";
 
 const PAGE_LIMIT = 12;
@@ -19,14 +26,16 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState<Partial<User> | undefined>(
     undefined
   );
-
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText] = useDebounceValue(searchText, 500);
   const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["users", currentPage],
-    queryFn: () => adminService.getAllUsers(currentPage, PAGE_LIMIT),
+    queryKey: ["users", currentPage, debouncedSearchText],
+    queryFn: () =>
+      adminService.getAllUsers(currentPage, PAGE_LIMIT, debouncedSearchText),
     initialData: {
       pagination: {
         limit: PAGE_LIMIT,
@@ -63,16 +72,21 @@ const Users = () => {
     setSelectedUser(undefined);
   };
 
-  const handleModalSubmit = async (values: any) => {
+  const handleModalSubmit = async (
+    values: RegisterUserRequest | Partial<User>
+  ) => {
     setModalLoading(true);
     try {
       if (selectedUser?.id) {
         // Edit existing user
-        await adminService.updateUserById(selectedUser.id, values);
+        await adminService.updateUserById(
+          selectedUser.id,
+          values as Partial<User>
+        );
         message.success("User updated successfully");
       } else {
         // Add new user
-        await adminService.registerUser(values);
+        await adminService.registerUser(values as RegisterUserRequest);
         message.success("User added successfully");
       }
       setModalVisible(false);
@@ -125,6 +139,11 @@ const Users = () => {
         navigate(`/subscription/${record.username}/${record.id}`);
       },
     };
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const columns: ColumnsType<User> = [
@@ -224,9 +243,21 @@ const Users = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">User Management</h1>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAddUser}>
-          Add New User
-        </Button>
+        <div className="flex gap-3 items-center">
+          <Input
+            placeholder="Search by username, email, name, or role"
+            value={searchText}
+            onChange={handleSearch}
+            prefix={<MagnifyingGlass />}
+          />
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={handleAddUser}
+          >
+            Add New User
+          </Button>
+        </div>
       </div>
 
       <Table
