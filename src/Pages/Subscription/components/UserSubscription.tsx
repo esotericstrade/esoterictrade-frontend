@@ -1,9 +1,11 @@
 import { adminService } from "@/utils/api/admin/service";
 import { subscriptionService } from "@/utils/api/subscription/service";
-import { Plus } from "@phosphor-icons/react";
+import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Tag } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import { Button, Input, Tag } from "antd";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
+import { FilterValue, SorterResult } from "antd/es/table/interface";
+import React from "react";
 import { useParams } from "react-router-dom";
 import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
@@ -35,29 +37,50 @@ const UserSubscription = () => {
       if (!userId) {
         throw new Error("User ID is required");
       }
-      return subscriptionService.getUserSubscriptions(userId);
-    },
-    select: (data) => {
-      return {
-        ...data,
-        subscriptions: data.subscriptions.sort((a, b) => {
-          const nameA = a.actor.instrument_name.toLowerCase();
-          const nameB = b.actor.instrument_name.toLowerCase();
-          return nameA.localeCompare(nameB);
-        }),
-      };
+      return subscriptionService.getUserSubscriptions({
+        userId,
+      });
     },
   });
 
+  const [searchText, setSearchText] = React.useState("");
+
+  type SorterType = {
+    columnKey?: string | number;
+    order?: "ascend" | "descend";
+  };
+  const [sortedInfo, setSortedInfo] = React.useState<SorterType>({});
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleChange = (
+    _pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<Subscription> | SorterResult<Subscription>[]
+  ) => {
+    // If sorter is an array (multi-sort), pick the first one, else use as is
+    const sortObj = Array.isArray(sorter) ? sorter[0] : sorter;
+    setSortedInfo({
+      columnKey: sortObj?.columnKey as string | number | undefined,
+      order: sortObj?.order === null ? undefined : sortObj?.order,
+    });
+  };
+
+  const filteredData = data.subscriptions.filter((sub) =>
+    sub.actor.instrument_name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   const columns: ColumnsType<Subscription> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 70,
-    },
-    {
-      title: "Instrument Name",
+      title: "Instrument",
+      dataIndex: ["actor", "instrument_name"],
+      key: "instrument_name",
+      sorter: (a, b) =>
+        a.actor.instrument_name.localeCompare(b.actor.instrument_name),
+      sortOrder:
+        sortedInfo.columnKey === "instrument_name" ? sortedInfo.order : null,
       render: (_, record) => {
         return record.actor.instrument_name;
       },
@@ -111,26 +134,36 @@ const UserSubscription = () => {
           </Tag>
         </div>
 
-        <AddNewSubscription>
-          {({ setOpen }) => (
-            <Button
-              type="primary"
-              icon={<Plus />}
-              onClick={() => setOpen(true)}
-            >
-              Add New Subscription
-            </Button>
-          )}
-        </AddNewSubscription>
+        <div className="flex gap-2 items-center">
+          <Input
+            placeholder="Search by username, email, name, or role"
+            value={searchText}
+            onChange={handleSearch}
+            className="rounded-full w-64"
+            prefix={<MagnifyingGlass />}
+          />
+          <AddNewSubscription>
+            {({ setOpen }) => (
+              <Button
+                type="primary"
+                icon={<Plus />}
+                onClick={() => setOpen(true)}
+              >
+                Add New Subscription
+              </Button>
+            )}
+          </AddNewSubscription>
+        </div>
       </div>
 
       <Table
         loading={isFetching}
-        dataSource={data.subscriptions}
+        dataSource={filteredData}
         columns={columns}
         pagination={false}
         rowKey="id"
         scroll={{ x: true }}
+        onChange={handleChange}
       />
     </section>
   );
