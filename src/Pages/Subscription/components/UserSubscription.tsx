@@ -11,6 +11,8 @@ import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
 import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 
+const PAGE_LIMIT = 12;
+
 const UserSubscription = () => {
   const { userId, userName } = useParams();
 
@@ -44,6 +46,9 @@ const UserSubscription = () => {
   });
 
   const [searchText, setSearchText] = React.useState("");
+  // Pagination state
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(PAGE_LIMIT);
 
   type SorterType = {
     columnKey?: string | number;
@@ -52,25 +57,55 @@ const UserSubscription = () => {
   const [sortedInfo, setSortedInfo] = React.useState<SorterType>({});
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentPage(1); // Reset to first page on search
     setSearchText(e.target.value);
   };
 
   const handleChange = (
-    _pagination: TablePaginationConfig,
+    pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
     sorter: SorterResult<Subscription> | SorterResult<Subscription>[]
   ) => {
-    // If sorter is an array (multi-sort), pick the first one, else use as is
+    // Handle sorting
     const sortObj = Array.isArray(sorter) ? sorter[0] : sorter;
     setSortedInfo({
       columnKey: sortObj?.columnKey as string | number | undefined,
       order: sortObj?.order === null ? undefined : sortObj?.order,
     });
+    // Handle pagination
+    if (pagination.current) setCurrentPage(pagination.current);
+    if (pagination.pageSize) setPageSize(pagination.pageSize);
   };
 
-  const filteredData = data.subscriptions.filter((sub) =>
-    sub.actor.instrument_name.toLowerCase().includes(searchText.toLowerCase())
-  );
+  // Filtered data based on search
+  const filteredData = React.useMemo(() => {
+    return data.subscriptions.filter((sub) =>
+      sub.actor.instrument_name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }, [data.subscriptions, searchText]);
+
+  // Sorted data based on sortedInfo
+  const sortedData = React.useMemo(() => {
+    if (!sortedInfo.columnKey || !sortedInfo.order) return filteredData;
+    const sorted = [...filteredData];
+    if (sortedInfo.columnKey === "instrument_name") {
+      sorted.sort((a, b) => {
+        const result = a.actor.instrument_name.localeCompare(
+          b.actor.instrument_name
+        );
+        return sortedInfo.order === "ascend" ? result : -result;
+      });
+    }
+    // Add more sorting logic here if you add more sortable columns
+    return sorted;
+  }, [filteredData, sortedInfo]);
+
+  // Paginated data
+  const paginatedData = React.useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return sortedData.slice(start, end);
+  }, [sortedData, currentPage, pageSize]);
 
   const columns: ColumnsType<Subscription> = [
     {
@@ -158,9 +193,15 @@ const UserSubscription = () => {
 
       <Table
         loading={isFetching}
-        dataSource={filteredData}
+        dataSource={paginatedData}
         columns={columns}
-        pagination={false}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: filteredData.length,
+          showSizeChanger: true,
+          pageSizeOptions: [5, 10, 20, 50],
+        }}
         rowKey="id"
         scroll={{ x: true }}
         onChange={handleChange}
