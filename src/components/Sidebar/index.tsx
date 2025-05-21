@@ -70,7 +70,7 @@ const Sidebar = () => {
       <Menu
         items={MENU_ITEMS.map(({ key, icon: Icon, label, href }) => ({
           key,
-          icon: <Icon size={16} weight="fill" />,
+          icon: <Icon size={16} weight="duotone" />,
           label,
           onClick: () => navigate(href),
         }))}
@@ -81,25 +81,27 @@ const Sidebar = () => {
         items={[
           {
             key: "community",
-            icon: <Smiley size={16} weight="fill" />,
+            icon: <Smiley size={16} weight="duotone" />,
             label: "Community",
             onClick: () => navigate("/community"),
           },
           {
             key: "settings",
-            icon: <Gear size={16} weight="fill" />,
+            icon: <Gear size={16} weight="duotone" />,
             label: "Settings",
             onClick: () => navigate("/settings"),
           },
           {
             key: "help",
-            icon: <Headset size={16} weight="fill" />,
+            icon: <Headset size={16} weight="duotone" />,
             label: "Help & support",
             onClick: () => navigate("/help-and-support"),
           },
           {
             key: "logout",
-            icon: <SignOut size={16} weight="fill" className="!fill-red-500" />,
+            icon: (
+              <SignOut size={16} weight="duotone" className="!fill-red-500" />
+            ),
             label: "Logout",
             onClick: onLogout,
             className:
@@ -124,7 +126,7 @@ const Sidebar = () => {
           </p>
         </div>
 
-        <CaretDown weight="fill" size={16} className="text-gray-500" />
+        <CaretDown weight="duotone" size={16} className="text-gray-500" />
       </div>
     </aside>
   );
