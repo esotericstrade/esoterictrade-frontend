@@ -248,6 +248,7 @@ const Users = () => {
             placeholder="Search by username, email, name, or role"
             value={searchText}
             onChange={handleSearch}
+            className="rounded-full w-64"
             prefix={<MagnifyingGlass />}
           />
           <Button
