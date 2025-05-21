@@ -2,10 +2,10 @@ import { adminService } from "@/utils/api/admin/service";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Input, Tag } from "antd";
+import { Button, Input, Switch, Tag } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
@@ -14,6 +14,7 @@ import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 const PAGE_LIMIT = 12;
 
 const UserSubscription = () => {
+  const [activeOnly, setActiveOnly] = useState(false);
   const { userId, userName } = useParams();
 
   const { data: user } = useQuery({
@@ -27,7 +28,7 @@ const UserSubscription = () => {
   });
 
   const { data, isFetching } = useQuery({
-    queryKey: ["userSubscription", userId],
+    queryKey: ["userSubscription", userId, activeOnly],
     enabled: !!userId,
     initialData: {
       active: 0,
@@ -35,12 +36,13 @@ const UserSubscription = () => {
       total: 0,
     },
     queryFn: ({ queryKey }) => {
-      const [, userId] = queryKey;
-      if (!userId) {
+      const [, userIdKey, activeOnlyKey] = queryKey;
+      if (!userIdKey) {
         throw new Error("User ID is required");
       }
       return subscriptionService.getUserSubscriptions({
-        userId,
+        userId: userIdKey as string,
+        activeOnly: Boolean(activeOnlyKey),
       });
     },
   });
@@ -77,7 +79,7 @@ const UserSubscription = () => {
     if (pagination.pageSize) setPageSize(pagination.pageSize);
   };
 
-  // Filtered data based on search
+  // Filtered data based on search only (activeOnly handled by backend)
   const filteredData = React.useMemo(() => {
     return data.subscriptions.filter((sub) =>
       sub.actor.instrument_name.toLowerCase().includes(searchText.toLowerCase())
@@ -148,7 +150,15 @@ const UserSubscription = () => {
       ),
     },
     {
-      title: "Active",
+      title: (
+        <Switch
+          checked={activeOnly}
+          onChange={setActiveOnly}
+          checkedChildren="Active Only"
+          unCheckedChildren="All Subs."
+        />
+      ),
+      align: "center",
       key: "active",
       render: (record) => (
         <SubscriptionStatusToggle record={record} userId={userId as string} />
@@ -164,9 +174,12 @@ const UserSubscription = () => {
             Subscriptions
             {user ? ` of ${user.first_name} ${user.last_name}` : ""}
           </h2>
-          <Tag color="green">
-            Active: {data.active} out of {data.total}
-          </Tag>
+
+          <div className="flex items-center gap-2">
+            <Tag color="green">
+              Active: {data.active} out of {data.total}
+            </Tag>
+          </div>
         </div>
 
         <div className="flex gap-2 items-center">
@@ -199,8 +212,8 @@ const UserSubscription = () => {
           current: currentPage,
           pageSize: pageSize,
           total: filteredData.length,
-          showSizeChanger: true,
-          pageSizeOptions: [5, 10, 20, 50],
+          showTotal: (total, range) =>
+            `Showing ${range[0]}-${range[1]} of ${total} subscriptions`,
         }}
         rowKey="id"
         scroll={{ x: true }}
