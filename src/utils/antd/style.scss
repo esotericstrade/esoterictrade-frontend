@@ -94,4 +94,10 @@
       }
     }
   }
+
+  ul.ant-pagination {
+    li.ant-pagination-item {
+      @apply rounded-full transition-colors ease-in size-7 leading-none grid place-items-center;
+    }
+  }
 }
