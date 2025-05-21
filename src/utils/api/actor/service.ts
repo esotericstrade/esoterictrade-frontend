@@ -2,15 +2,27 @@ import { apiClient } from "../apiClient";
 
 export const actorService = {
   getAllActors: async (
-    page: number = 1,
-    limit: number = 20,
-    strategyId?: number,
-    instrument?: string
+    param: {
+      page: number;
+      limit: number;
+      strategyId?: number;
+      instrument?: string;
+    } = {
+      page: 1,
+      limit: 12,
+    }
   ) => {
-    let url = `/api/actors?page=${page}&limit=${limit}`;
-    if (strategyId) url += `&strategy_id=${strategyId}`;
-    if (instrument) url += `&instrument=${instrument}`;
-    return await apiClient.get<PaginatedResponse<{ actors: Actor[] }>>(url);
+    return await apiClient.get<PaginatedResponse<{ actors: Actor[] }>>(
+      `/api/actors`,
+      {
+        params: {
+          page: param.page,
+          limit: param.limit,
+          strategy_id: param.strategyId,
+          instrument: param.instrument,
+        },
+      }
+    );
   },
 
   // Get actor by ID

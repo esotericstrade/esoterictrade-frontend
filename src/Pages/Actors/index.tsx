@@ -2,24 +2,29 @@
 import { actorService } from "@/utils/api/actor/service";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Table, Tag } from "antd";
+import { Button, Input, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { useDebounceValue } from "usehooks-ts";
 import AddNewActorModal from "./components/AddNewActor";
 
 const PAGE_LIMIT = 12;
 
 const Actors = () => {
-  // const [selectedActor, setSelectedActor] = useState<
-  //   Partial<Actor> | undefined
-  // >(undefined);
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+
+  const [debouncedSearch] = useDebounceValue(search, 500);
 
   const { data, isFetching } = useQuery({
-    queryKey: ["actors", currentPage],
-    queryFn: () => actorService.getAllActors(currentPage, PAGE_LIMIT),
+    queryKey: ["actors", currentPage, debouncedSearch],
+    queryFn: () =>
+      actorService.getAllActors({
+        page: currentPage,
+        limit: PAGE_LIMIT,
+        instrument: debouncedSearch || undefined,
+      }),
     initialData: {
       pagination: {
         pages: 0,
@@ -83,19 +88,31 @@ const Actors = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Actors Management</h1>
-        <AddNewActorModal>
-          {({ setOpen }) => (
-            <>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => setOpen(true)}
-              >
-                Add New Actor
-              </Button>
-            </>
-          )}
-        </AddNewActorModal>
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Search Instrument Name"
+            value={search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="rounded-full w-64"
+            allowClear
+          />
+          <AddNewActorModal>
+            {({ setOpen }) => (
+              <>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => setOpen(true)}
+                >
+                  Add New Actor
+                </Button>
+              </>
+            )}
+          </AddNewActorModal>
+        </div>
       </div>
 
       <Table
