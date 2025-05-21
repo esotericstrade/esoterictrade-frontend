@@ -93,7 +93,7 @@ const Sidebar = () => {
             <div className="flex items-center px-2">
               <UserCircle
                 weight="fill"
-                className="mx-auto text-blue-600"
+                className="mx-auto text-primary-600"
                 size={18}
               />
               <div
