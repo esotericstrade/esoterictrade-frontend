@@ -116,23 +116,25 @@ const Users = () => {
     }
   };
 
-  const handleDeleteUser = async (userId: number) => {
+  const handleDeleteUser = (userId: number) => {
     Modal.confirm({
       title: "Are you sure you want to delete this user?",
       content: "This action cannot be undone.",
       okText: "Yes, Delete",
       okType: "danger",
-      onOk: async () => {
-        try {
-          await adminService.deleteUserById(userId);
-          message.success("User deleted successfully");
-          queryClient.invalidateQueries({
-            queryKey: ["users", currentPage],
+      onOk: () => {
+        return adminService
+          .deleteUserById(userId)
+          .then(() => {
+            message.success("User deleted successfully");
+            queryClient.invalidateQueries({
+              queryKey: ["users", currentPage],
+            });
+          })
+          .catch((error) => {
+            console.error("Error deleting user:", error);
+            message.error("Failed to delete user");
           });
-        } catch (error) {
-          console.error("Error deleting user:", error);
-          message.error("Failed to delete user");
-        }
       },
     });
   };
@@ -153,17 +155,6 @@ const Users = () => {
 
   const columns: ColumnsType<User> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 70,
-    },
-    {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-    },
-    {
       title: "Name",
       key: "name",
       dataIndex: "first_name",
@@ -177,6 +168,11 @@ const Users = () => {
             : undefined
           : undefined,
       render: (_, record) => `${record.first_name} ${record.last_name}`,
+    },
+    {
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "Email",
@@ -293,7 +289,7 @@ const Users = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">User Management</h1>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-2 items-center">
           <Input
             placeholder="Search by username, email, name, or role"
             value={searchText}
