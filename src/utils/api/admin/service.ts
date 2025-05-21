@@ -3,19 +3,31 @@ import { apiClient } from "../apiClient";
 
 export const adminService = {
   // Get all users (admin only)
-  getAllUsers: async (
-    page: number = 1,
-    limit: number = 20,
-    searchQuery: string = ""
-  ): Promise<PaginatedResponse<{ users: User[] }>> => {
+  getAllUsers: async ({
+    page = 1,
+    limit = 20,
+    searchQuery = undefined,
+    sortField = undefined,
+    sortOrder = undefined,
+  }: {
+    page: number;
+    limit: number;
+    searchQuery?: string;
+    sortField?: string;
+    sortOrder?: string;
+  }): Promise<PaginatedResponse<{ users: User[] }>> => {
     try {
-      let url = `/api/users?page=${page}&limit=${limit}`;
-      if (searchQuery.trim()) {
-        url += `&search=${encodeURIComponent(searchQuery.trim())}`;
-      }
       const response = await apiClient.get<
         PaginatedResponse<{ users: User[] }>
-      >(url);
+      >(`/api/users`, {
+        params: {
+          page,
+          limit,
+          search: searchQuery,
+          sort_field: sortField,
+          sort_order: sortOrder,
+        },
+      });
       return response;
     } catch (error) {
       console.error("Error in getAllUsers:", error);

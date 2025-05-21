@@ -10,7 +10,8 @@ import {
 } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Input, message, Modal, Table, Tag } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
+import { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
@@ -29,13 +30,23 @@ const Users = () => {
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText] = useDebounceValue(searchText, 500);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState<string | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | undefined>(
+    undefined
+  );
 
   const navigate = useNavigate();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["users", currentPage, debouncedSearchText],
+    queryKey: ["users", currentPage, debouncedSearchText, sortField, sortOrder],
     queryFn: () =>
-      adminService.getAllUsers(currentPage, PAGE_LIMIT, debouncedSearchText),
+      adminService.getAllUsers({
+        page: currentPage,
+        limit: PAGE_LIMIT,
+        searchQuery: debouncedSearchText,
+        sortField,
+        sortOrder,
+      }),
     initialData: {
       pagination: {
         limit: PAGE_LIMIT,
@@ -45,15 +56,9 @@ const Users = () => {
       },
       users: [],
     },
+    // Remove local sorting, rely on API sorting
     select(data) {
-      return {
-        ...data,
-        users: data.users.sort((a: User, b: User) => {
-          const nameA = `${a.first_name} ${a.last_name}`.toLowerCase();
-          const nameB = `${b.first_name} ${b.last_name}`.toLowerCase();
-          return nameA.localeCompare(nameB);
-        }),
-      };
+      return data;
     },
   });
 
@@ -161,6 +166,16 @@ const Users = () => {
     {
       title: "Name",
       key: "name",
+      dataIndex: "first_name",
+      sorter: true,
+      sortOrder:
+        sortField === "name"
+          ? sortOrder === "asc"
+            ? "ascend"
+            : sortOrder === "desc"
+            ? "descend"
+            : undefined
+          : undefined,
       render: (_, record) => `${record.first_name} ${record.last_name}`,
     },
     {
@@ -192,6 +207,15 @@ const Users = () => {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
+      sorter: true,
+      sortOrder:
+        sortField === "created_at"
+          ? sortOrder === "asc"
+            ? "ascend"
+            : sortOrder === "desc"
+            ? "descend"
+            : undefined
+          : undefined,
       render: (d) =>
         Array.isArray(d)
           ? new Date(d[0], d[1] - 1, d[2]).toLocaleDateString()
@@ -239,6 +263,32 @@ const Users = () => {
     },
   ];
 
+  // Table onChange handler for sorting
+  const handleTableChange = (
+    _pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<User> | SorterResult<User>[]
+  ) => {
+    // Only handle single sorter
+    const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
+    if (singleSorter && typeof singleSorter.field === "string") {
+      let field = singleSorter.field;
+      if (field === "name") field = "name";
+      if (field === "created_at") field = "created_at";
+      setSortField(field);
+      setSortOrder(
+        singleSorter.order === "ascend"
+          ? "asc"
+          : singleSorter.order === "descend"
+          ? "desc"
+          : undefined
+      );
+    } else {
+      setSortField(undefined);
+      setSortOrder(undefined);
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -279,6 +329,7 @@ const Users = () => {
             return `Showing ${range[0]}-${range[1]} of ${total} users`;
           },
         }}
+        onChange={handleTableChange}
       />
 
       <UserFormModal
