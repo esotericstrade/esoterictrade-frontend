@@ -7,6 +7,8 @@ export const actorService = {
       limit: number;
       strategyId?: number;
       instrument?: string;
+      sort_by?: string;
+      sort_order?: "asc" | "desc";
     } = {
       page: 1,
       limit: 12,
@@ -20,6 +22,8 @@ export const actorService = {
           limit: param.limit,
           strategy_id: param.strategyId,
           instrument: param.instrument,
+          sort_by: param.sort_by,
+          sort_order: param.sort_order,
         },
       }
     );

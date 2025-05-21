@@ -15,6 +15,15 @@ interface Actor {
   updated_at: string;
 }
 
+interface GetAllActorsParams {
+  page: number;
+  limit: number;
+  strategyId?: number;
+  instrument?: string;
+  sort_by?: string;
+  sort_order?: "asc" | "desc";
+}
+
 interface CreateActorRequest {
   strategy_id: number;
   name: string;

@@ -17,13 +17,20 @@ const Actors = () => {
 
   const [debouncedSearch] = useDebounceValue(search, 500);
 
+  const [sortField, setSortField] = useState<string | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | undefined>(
+    undefined
+  );
+
   const { data, isFetching } = useQuery({
-    queryKey: ["actors", currentPage, debouncedSearch],
+    queryKey: ["actors", currentPage, debouncedSearch, sortField, sortOrder],
     queryFn: () =>
       actorService.getAllActors({
         page: currentPage,
         limit: PAGE_LIMIT,
         instrument: debouncedSearch || undefined,
+        sort_by: sortField,
+        sort_order: sortOrder,
       }),
     initialData: {
       pagination: {
@@ -50,6 +57,13 @@ const Actors = () => {
       title: "Instrument Name",
       dataIndex: "instrument_name",
       key: "instrument_name",
+      sorter: true,
+      sortOrder:
+        sortField === "instrument_name"
+          ? sortOrder === "asc"
+            ? "ascend"
+            : "descend"
+          : undefined,
     },
     {
       title: "Strategy Name",
@@ -74,12 +88,13 @@ const Actors = () => {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
-      render: (date) => dayjs(date).format("DD MMM YYYY"),
-    },
-    {
-      title: "Updated At",
-      dataIndex: "updated_at",
-      key: "updated_at",
+      sorter: true,
+      sortOrder:
+        sortField === "created_at"
+          ? sortOrder === "asc"
+            ? "ascend"
+            : "descend"
+          : undefined,
       render: (date) => dayjs(date).format("DD MMM YYYY"),
     },
   ];
@@ -132,6 +147,16 @@ const Actors = () => {
           showTotal(total, range) {
             return `Showing ${range[0]}-${range[1]} of ${total} actors`;
           },
+        }}
+        onChange={(pagination, filters, sorter) => {
+          if (Array.isArray(sorter)) return;
+          if (sorter && sorter.order) {
+            setSortField(sorter.field as string);
+            setSortOrder(sorter.order === "ascend" ? "asc" : "desc");
+          } else {
+            setSortField(undefined);
+            setSortOrder(undefined);
+          }
         }}
       />
     </div>
