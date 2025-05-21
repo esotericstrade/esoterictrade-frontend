@@ -150,7 +150,7 @@ const Actors = () => {
             return `Showing ${range[0]}-${range[1]} of ${total} actors`;
           },
         }}
-        onChange={(pagination, filters, sorter) => {
+        onChange={(_pagination, _filters, sorter) => {
           if (Array.isArray(sorter)) return;
           if (sorter && sorter.order) {
             setSortField(sorter.field as string);
