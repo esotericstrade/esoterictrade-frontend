@@ -57,13 +57,13 @@
 
 .tradeco-modal {
   .ant-modal-content {
-    @apply rounded-2xl shadow-2xl bg-gray-100 p-2;
+    @apply rounded-xl shadow-xl bg-gray-100 p-2 ring-1 ring-gray-300;
 
     .ant-modal-header {
       @apply bg-transparent text-center pt-3 pb-2;
     }
     .ant-modal-body {
-      @apply px-4 py-3 rounded-2xl bg-white;
+      @apply px-4 py-3 rounded-xl bg-white border border-gray-200;
     }
     .ant-modal-footer {
       @apply px-4 mb-1;
