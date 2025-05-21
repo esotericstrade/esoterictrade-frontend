@@ -62,7 +62,9 @@ const Strategies = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Strategies Management</h1>
+        <h2 className="text-2xl font-semibold font-poppins">
+          Strategies Management
+        </h2>
       </div>
 
       <Table

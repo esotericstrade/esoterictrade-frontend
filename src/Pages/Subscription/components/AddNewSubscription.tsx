@@ -32,7 +32,11 @@ const AddNewSubscription: React.FC<{
     isFetching,
   } = useQuery({
     queryKey: ["actors"],
-    queryFn: () => actorService.getAllActors(1, PAGE_LIMIT),
+    queryFn: () =>
+      actorService.getAllActors({
+        page: 1,
+        limit: PAGE_LIMIT,
+      }),
     initialData: {
       pagination: {
         pages: 0,
@@ -49,7 +53,12 @@ const AddNewSubscription: React.FC<{
     isFetching: isUsersLoading,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: () => adminService.getAllUsers(1, PAGE_LIMIT),
+    queryFn: () =>
+      adminService.getAllUsers({
+        page: 1,
+        limit: PAGE_LIMIT,
+        searchQuery: "",
+      }),
     initialData: {
       pagination: {
         pages: 0,

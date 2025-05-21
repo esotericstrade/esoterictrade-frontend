@@ -288,7 +288,7 @@ const Users = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">User Management</h1>
+        <h2 className="text-2xl font-semibold font-poppins">User Management</h2>
         <div className="flex gap-2 items-center">
           <Input
             placeholder="Search by username, email, name, or role"

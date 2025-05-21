@@ -102,7 +102,9 @@ const Actors = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Actors Management</h1>
+        <h1 className="text-2xl font-semibold font-poppins">
+          Actors Management
+        </h1>
         <div className="flex items-center gap-2">
           <Input
             placeholder="Search Instrument Name"

@@ -170,7 +170,7 @@ const UserSubscription = () => {
     <section>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-2xl font-semibold font-poppins">
             Subscriptions
             {user ? ` of ${user.first_name} ${user.last_name}` : ""}
           </h2>
