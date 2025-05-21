@@ -42,12 +42,6 @@ const Actors = () => {
 
   const columns: ColumnsType<Actor> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 70,
-    },
-    {
       title: "Instrument Name",
       dataIndex: "instrument_name",
       key: "instrument_name",
