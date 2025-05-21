@@ -6,10 +6,12 @@ import Sidebar from "../Sidebar";
 
 const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <Layout className="grid grid-rows-[auto_1fr] grid-cols-[auto,1fr] max-h-dvh overflow-hidden">
+    <Layout className="grid grid-rows-[auto_1fr] grid-cols-[auto,1fr] max-h-dvh overflow-hidden bg-white">
       <Header />
       <Sidebar />
-      <Content className="p-6 overflow-y-auto">{children}</Content>
+      <Content className="p-6 overflow-y-auto rounded-tl-xl bg-zinc-100">
+        {children}
+      </Content>
     </Layout>
   );
 };
