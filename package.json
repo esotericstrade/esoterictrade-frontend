@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:prod": "cross-env VITE_API_BASE_URL=https://esoterictrade.in vite build",
+    "build:stage": "cross-env VITE_API_BASE_URL=https://esoterictrade.org vite build",
+    "build:dev": "cross-env VITE_API_BASE_URL=https://esoterictrade.net vite build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
@@ -29,6 +32,7 @@
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^7.0.3",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
