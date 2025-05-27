@@ -44,6 +44,12 @@ const MENU_ITEMS = [
     href: "/strategies",
   },
   {
+    key: "brokers",
+    icon: Users,
+    label: "Brokers",
+    href: "/brokers",
+  },
+  {
     key: "positions",
     icon: WaveTriangle,
     label: "Positions",
