@@ -27,7 +27,7 @@ type TFormValues = BaseWebhookPayload;
 const PAGE_LIMIT = 500;
 
 const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [form] = useForm<TFormValues>();
   const toast = useToaster();
 

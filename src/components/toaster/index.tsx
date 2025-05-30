@@ -1,3 +1,4 @@
+import { CircleWavyCheck, XCircle } from "@phosphor-icons/react";
 import { App } from "antd";
 import React from "react";
 
@@ -18,6 +19,10 @@ const useToaster = () => {
     { duration = 3, onClose, description }: IToastType = {}
   ) => {
     api.success({
+      icon: (
+        <CircleWavyCheck className="text-emerald-600" size={20} weight="fill" />
+      ),
+
       message,
       description,
       duration,
@@ -30,6 +35,7 @@ const useToaster = () => {
     { duration = 3, onClose, description }: IToastType = {}
   ) => {
     api.error({
+      icon: <XCircle className="text-rose-600" size={20} weight="fill" />,
       message,
       description,
       duration,

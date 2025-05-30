@@ -39,6 +39,10 @@ export const antdConfig: ConfigProviderProps = {
   message: {
     className: "tradeco-message",
   },
+  notification: {
+    className: "tradeco-notification",
+  },
+
   table: {
     className: "tradeco-table",
   },
