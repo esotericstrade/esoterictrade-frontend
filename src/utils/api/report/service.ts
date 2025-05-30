@@ -69,7 +69,7 @@ export const reportService = {
     params: EntityReportParams
   ): Promise<PaginatedReportResponse<EntityReportItem>> => {
     const { entity_type, entity_id, ...queryParams } = params;
-    
+
     return await apiClient.get<PaginatedReportResponse<EntityReportItem>>(
       `/api/reports/entity/${entity_type}/${entity_id}`,
       {
@@ -110,15 +110,13 @@ export const reportService = {
     request: CustomReportRequest,
     params: BaseReportParams = {}
   ): Promise<PaginatedReportResponse<Record<string, unknown>>> => {
-    return await apiClient.post<PaginatedReportResponse<Record<string, unknown>>>(
-      "/api/reports/custom",
-      request,
-      {
-        params: {
-          page: params.page || 1,
-          size: params.size || 20,
-        },
-      }
-    );
+    return await apiClient.post<
+      PaginatedReportResponse<Record<string, unknown>>
+    >("/api/reports/custom", request, {
+      params: {
+        page: params.page || 1,
+        size: params.size || 20,
+      },
+    });
   },
 };

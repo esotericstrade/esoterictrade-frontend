@@ -38,7 +38,7 @@ interface TradeReportParams extends BaseReportParams {
  * Entity report query parameters
  */
 interface EntityReportParams extends BaseReportParams {
-  entity_type: 'actor' | 'strategy' | 'user' | 'subscription';
+  entity_type: "actor" | "strategy" | "user" | "subscription";
   entity_id: number;
 }
 
@@ -96,7 +96,7 @@ interface SubscriptionReportItem {
   username: string;
   actor_id: number;
   actor_name: string;
-  action: 'created' | 'updated' | 'deleted' | 'activated' | 'deactivated';
+  action: "created" | "updated" | "deleted" | "activated" | "deactivated";
   details: Record<string, unknown>;
   timestamp: string;
 }
