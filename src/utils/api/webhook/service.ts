@@ -4,9 +4,11 @@ export const webhookService = {
   /**
    * Trigger EMA SMA SLOPE webhook
    */
-  triggerEmaSmaSlope: async (
-    data: BaseWebhookPayload
-  ): Promise<WebhookResponse> => {
+  triggerEmaSmaSlope: async ({
+    data,
+  }: {
+    data: BaseWebhookPayload;
+  }): Promise<WebhookResponse> => {
     return await apiClient.post<WebhookResponse>(
       "/api/webhook/ema-sma-slope",
       data
