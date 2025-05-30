@@ -14,7 +14,7 @@ export const actorService = {
       limit: 12,
     }
   ) => {
-    return await apiClient.get<PaginatedResponse<{ actors: Actor[] }>>(
+    return await apiClient.get<PaginatedResponse<{ data: Actor[] }>>(
       `/api/actors`,
       {
         params: {
