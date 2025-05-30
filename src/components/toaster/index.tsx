@@ -1,10 +1,5 @@
-import { message } from "antd";
-import React, { createContext, useContext } from "react";
-
-type TToasterContext = {
-  success: (content: string, { duration, onClose }?: IToastType) => void;
-  error: (content: string, { duration, onClose }?: IToastType) => void;
-};
+import { App } from "antd";
+import React from "react";
 
 type IToastType = {
   duration?: number;
@@ -15,47 +10,37 @@ type IToastType = {
   key?: string | number;
 };
 
-const ToasterContext = createContext<TToasterContext | undefined>(undefined);
-
-const ToasterProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [api, contextProvider] = message.useMessage();
+const useToaster = () => {
+  const { notification: api } = App.useApp();
 
   const success = (
-    content: string,
-    { duration = 3, onClose }: IToastType = {}
+    message: string,
+    { duration = 3, onClose, description }: IToastType = {}
   ) => {
-    api.success(content, duration, onClose);
+    api.success({
+      message,
+      description,
+      duration,
+      onClose,
+    });
   };
 
   const error = (
-    content: string,
-    { duration = 3, onClose }: IToastType = {}
+    message: string,
+    { duration = 3, onClose, description }: IToastType = {}
   ) => {
-    api.error(content, duration, onClose);
+    api.error({
+      message,
+      description,
+      duration,
+      onClose,
+    });
   };
 
-  return (
-    <ToasterContext.Provider
-      value={{
-        success,
-        error,
-      }}
-    >
-      {contextProvider}
-      {children}
-    </ToasterContext.Provider>
-  );
+  return {
+    success,
+    error,
+  };
 };
 
-export default ToasterProvider;
-
-export const useToaster = () => {
-  const context = useContext(ToasterContext);
-
-  if (context === undefined) {
-    throw new Error("useToaster must be within Toaster");
-  }
-  return context;
-};
+export default useToaster;
