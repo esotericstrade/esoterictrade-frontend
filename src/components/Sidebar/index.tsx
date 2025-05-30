@@ -8,15 +8,17 @@ import {
   Headset,
   House,
   Lightning,
+  Plus,
   SignOut,
   Smiley,
   UserCircle,
   Users,
   WaveTriangle,
 } from "@phosphor-icons/react";
-import { Divider, Menu } from "antd";
+import { Button, Divider, Menu } from "antd";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
+import PlaceOrderWrapper from "../PlaceOrderWrapper";
 
 const MENU_ITEMS = [
   {
@@ -75,6 +77,20 @@ const Sidebar = () => {
 
   return (
     <aside className="w-[220px] bg-white px-4 py-5 overflow-y-auto flex flex-col h-[calc(100vh-70px)]">
+      <PlaceOrderWrapper>
+        {({ setOpen }) => (
+          <Button
+            type="primary"
+            block
+            icon={<Plus size={16} />}
+            children="Place order"
+            onClick={() => setOpen(true)}
+          />
+        )}
+      </PlaceOrderWrapper>
+
+      <Divider className="my-3" />
+
       <Menu
         items={MENU_ITEMS.map(({ key, icon: Icon, label, href }) => ({
           key,
