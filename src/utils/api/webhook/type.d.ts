@@ -57,6 +57,6 @@ type WebhookCallbacksResponse = {
   created_at: string;
   last_called_at: string;
   call_count: number;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   description?: string;
 }[];

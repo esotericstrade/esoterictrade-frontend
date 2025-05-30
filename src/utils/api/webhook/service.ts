@@ -19,7 +19,10 @@ export const webhookService = {
   triggerTradingViewEmaSmaSlope: async (
     data: TradingViewWebhookPayload
   ): Promise<WebhookResponse> => {
-    return await apiClient.post<WebhookResponse>("/webhook/ema_sma_slope", data);
+    return await apiClient.post<WebhookResponse>(
+      "/webhook/ema_sma_slope",
+      data
+    );
   },
 
   /**
@@ -52,24 +55,25 @@ export const webhookService = {
    * Get all registered webhook callbacks
    */
   getWebhookCallbacks: async (): Promise<WebhookCallbacksResponse> => {
-    return await apiClient.get<WebhookCallbacksResponse>("/api/webhook/callbacks");
+    return await apiClient.get<WebhookCallbacksResponse>(
+      "/api/webhook/callbacks"
+    );
   },
 
   /**
    * Register a new webhook callback
    */
-  registerWebhookCallback: async (
-    data: { endpoint: string; description?: string }
-  ): Promise<WebhookResponse> => {
+  registerWebhookCallback: async (data: {
+    endpoint: string;
+    description?: string;
+  }): Promise<WebhookResponse> => {
     return await apiClient.post<WebhookResponse>("/api/webhook/register", data);
   },
 
   /**
    * Deactivate a webhook callback
    */
-  deactivateWebhookCallback: async (
-    id: number
-  ): Promise<WebhookResponse> => {
+  deactivateWebhookCallback: async (id: number): Promise<WebhookResponse> => {
     return await apiClient.post<WebhookResponse>(
       `/api/webhook/deactivate/${id}`,
       {}
