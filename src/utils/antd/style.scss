@@ -69,6 +69,14 @@
       @apply px-3 mb-1;
     }
   }
+
+  &.ant-modal-confirm {
+    .ant-modal-content {
+      .ant-modal-confirm-btns {
+        @apply grid grid-cols-2 gap-1 border-t border-t-gray-200 pt-3 mt-5;
+      }
+    }
+  }
 }
 
 .tradeco-table {
