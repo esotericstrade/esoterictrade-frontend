@@ -2,34 +2,14 @@
  * Webhook service type declarations
  */
 
-enum TRADE_TYPE {
-  LE = "LE",
-  SE = "SE",
-  LX = "LX",
-  SX = "SX",
-  LXSE = "LXSE",
-  SXLE = "SXLE",
-}
-
-enum PRODUCT_TYPE {
-  NRML = "NRML",
-  MIS = "MIS",
-}
-
-enum EXCHANGE_TYPE {
-  NFO = "NFO",
-  NSE = "NSE",
-  MCX = "MCX",
-}
-
 /**
  * Base webhook payload interface that all webhook types should extend
  */
 interface BaseWebhookPayload {
-  type: TRADE_TYPE;
+  type: string;
   symbol: string;
-  exchange: EXCHANGE_TYPE;
-  product: PRODUCT_TYPE;
+  exchange: string;
+  product: string;
 }
 
 /**
