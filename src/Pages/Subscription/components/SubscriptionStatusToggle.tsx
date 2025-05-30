@@ -1,8 +1,7 @@
-import { useToaster } from "@/components/toaster";
+import useToaster from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Switch } from "antd";
-
 const SubscriptionStatusToggle = ({
   record,
   userId,

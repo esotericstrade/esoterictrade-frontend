@@ -1,4 +1,4 @@
-import { useToaster } from "@/components/toaster";
+import useToaster from "@/components/toaster";
 import { actorService } from "@/utils/api/actor/service";
 import { adminService } from "@/utils/api/admin/service";
 import { subscriptionService } from "@/utils/api/subscription/service";
@@ -7,7 +7,6 @@ import { Button, DatePicker, Form, InputNumber, Modal, Select } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
 const PAGE_LIMIT = 500;
 
 const AddNewSubscription: React.FC<{
@@ -28,7 +27,7 @@ const AddNewSubscription: React.FC<{
   const [form] = Form.useForm();
 
   const {
-    data: { actors },
+    data: { data: actors },
     isFetching,
   } = useQuery({
     queryKey: ["actors"],
@@ -44,7 +43,7 @@ const AddNewSubscription: React.FC<{
         page: 1,
         limit: PAGE_LIMIT,
       },
-      actors: [],
+      data: [],
     },
   });
 

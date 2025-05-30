@@ -1,9 +1,8 @@
-import { useToaster } from "@/components/toaster";
+import useToaster from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InputNumber } from "antd";
 import { useState } from "react";
-
 const SubscriptionQuantityEdit = ({
   record,
   userId,

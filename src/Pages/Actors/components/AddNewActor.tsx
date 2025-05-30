@@ -1,9 +1,8 @@
-import { useToaster } from "@/components/toaster";
+import useToaster from "@/components/toaster";
 import { actorService } from "@/utils/api/actor/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input, InputNumber, Modal, Select } from "antd";
 import { useState } from "react";
-
 const AddNewActorModal: React.FC<{
   children: ({
     open,

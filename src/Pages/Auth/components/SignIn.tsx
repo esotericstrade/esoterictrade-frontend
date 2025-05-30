@@ -1,11 +1,10 @@
-import { useToaster } from "@/components/toaster";
+import useToaster from "@/components/toaster";
 import { authService } from "@/utils/api/auth/service";
 import { AppleOutlined, GoogleOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context";
-
 const { Title, Text, Link } = Typography;
 const SignIn = () => {
   const [loading, setLoading] = useState(false);

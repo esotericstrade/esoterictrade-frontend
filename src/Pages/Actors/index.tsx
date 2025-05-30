@@ -39,7 +39,7 @@ const Actors = () => {
         page: 1,
         limit: PAGE_LIMIT,
       },
-      actors: [],
+      data: [],
     },
   });
 
@@ -135,7 +135,7 @@ const Actors = () => {
       <Table
         loading={isFetching}
         columns={columns}
-        dataSource={data.actors}
+        dataSource={data.data}
         rowKey="id"
         onRow={onRow}
         rowClassName={"cursor-pointer"}
