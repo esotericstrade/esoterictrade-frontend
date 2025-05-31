@@ -149,3 +149,108 @@ interface EndpointReportItem {
   timestamp: string;
   ip_address?: string;
 }
+
+type TTradeReportsResponse = {
+  data: TradeReport[];
+  pagination: Pagination;
+};
+
+type TradeReport = {
+  status_code: number;
+  action_type: ActionType;
+  created_at: Date;
+  ip_address: IPAddress;
+  entity_id: EntityID;
+  endpoint: Endpoint;
+  http_method: HTTPMethod;
+  entity_type: EntityType;
+  user_id: number | null;
+  response: ReportResponse;
+  id: number;
+  request_data: RequestData;
+  user_agent: UserAgent;
+  username: Username;
+};
+
+type ActionType = "CREATE";
+
+type Endpoint = "/api/webhook/ema-sma-slope";
+
+type EntityID = "new";
+
+type EntityType = "Webhook";
+
+type HTTPMethod = "POST";
+
+type IPAddress = "127.0.0.1";
+
+type RequestData = {
+  requestBody: RequestBody;
+};
+
+type RequestBody = {
+  qty: string;
+  stop: string;
+  type: string;
+  symbol: string;
+  target: string;
+  product: Product;
+  exchange: Exchange;
+  trigger_time: null | string;
+};
+
+type Exchange = "NFO" | "NSE";
+
+type Product = "NRML" | "MIS";
+
+type ReportResponse = {
+  body: ReportResponseBody;
+  executionTimeMs: number;
+};
+
+type ReportResponseBody = {
+  message: string;
+  results: Result[];
+  success: boolean;
+  subscribers_processed: number;
+};
+
+type Result = {
+  message?: string;
+  success: boolean;
+  user_id: number;
+  username: string;
+  error?: string;
+};
+
+type UserAgent =
+  | "Go-http-client/1.1"
+  | "PostmanRuntime/7.43.4"
+  | "PostmanRuntime/7.44.0";
+
+type Username = "System" | "admin";
+
+type DateRange = {
+  start_date: Date;
+  end_date: Date;
+};
+
+type Filters = {
+  symbol: string;
+};
+
+type Pagination = {
+  total: number;
+  pages: number;
+  limit: number;
+  page: number;
+};
+
+type Summary = {
+  strategy_breakdown: StrategyBreakdown;
+  total_trade_activities: number;
+};
+
+type StrategyBreakdown = {
+  "/api/webhook/ema-sma-slope": number;
+};

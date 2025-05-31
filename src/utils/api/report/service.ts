@@ -47,19 +47,16 @@ export const reportService = {
    */
   getTradeReport: async (
     params: TradeReportParams = {}
-  ): Promise<PaginatedReportResponse<TradeReportItem>> => {
-    return await apiClient.get<PaginatedReportResponse<TradeReportItem>>(
-      "/api/reports/trades",
-      {
-        params: {
-          symbol: params.symbol,
-          start_date: params.start_date,
-          end_date: params.end_date,
-          page: params.page || 1,
-          size: params.size || 20,
-        },
-      }
-    );
+  ): Promise<TTradeReportsResponse> => {
+    return await apiClient.get<TTradeReportsResponse>("/api/reports/trades", {
+      params: {
+        symbol: params.symbol,
+        start_date: params.start_date,
+        end_date: params.end_date,
+        page: params.page || 1,
+        size: params.size || 20,
+      },
+    });
   },
 
   /**
