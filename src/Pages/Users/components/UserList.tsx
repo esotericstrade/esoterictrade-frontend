@@ -54,7 +54,7 @@ const Users = () => {
         total: 0,
         pages: 0,
       },
-      users: [],
+      data: [],
     },
     // Remove local sorting, rely on API sorting
     select(data) {
@@ -310,7 +310,7 @@ const Users = () => {
       <Table
         loading={isFetching}
         columns={columns}
-        dataSource={data.users}
+        dataSource={data.data}
         rowKey="id"
         onRow={onRow}
         rowClassName={"cursor-pointer"}

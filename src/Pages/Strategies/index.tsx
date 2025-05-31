@@ -21,7 +21,7 @@ const Strategies = () => {
         page: 1,
         limit: PAGE_LIMIT,
       },
-      strategies: [],
+      data: [],
     },
   });
 
@@ -70,7 +70,7 @@ const Strategies = () => {
       <Table
         loading={isFetching}
         columns={columns}
-        dataSource={data.strategies}
+        dataSource={data.data}
         rowKey="id"
         onRow={onRow}
         rowClassName={"cursor-pointer"}

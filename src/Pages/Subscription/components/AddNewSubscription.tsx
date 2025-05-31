@@ -48,7 +48,7 @@ const AddNewSubscription: React.FC<{
   });
 
   const {
-    data: { users },
+    data: { data: users },
     isFetching: isUsersLoading,
   } = useQuery({
     queryKey: ["users"],
@@ -65,7 +65,7 @@ const AddNewSubscription: React.FC<{
         page: 1,
         limit: PAGE_LIMIT,
       },
-      users: [],
+      data: [],
     },
   });
 

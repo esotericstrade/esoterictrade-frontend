@@ -4,7 +4,7 @@ export const strategyService = {
   getAllStrategies: async (page: number = 1, limit: number = 20) => {
     return await apiClient.get<
       PaginatedResponse<{
-        strategies: Strategy[];
+        data: Strategy[];
       }>
     >(`/api/strategies?page=${page}&limit=${limit}`);
   },
