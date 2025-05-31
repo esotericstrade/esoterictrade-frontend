@@ -96,8 +96,6 @@ const TradeReportTable = () => {
         if (!triggerTime) {
           return <span className="text-gray-300">---</span>;
         }
-        // "2025-05-19 15:05"
-
         const dateObject = dayjs(triggerTime, "YYYY-MM-DD hh:mm");
         if (!dateObject.isValid()) {
           return <span className="text-gray-300">---</span>;
