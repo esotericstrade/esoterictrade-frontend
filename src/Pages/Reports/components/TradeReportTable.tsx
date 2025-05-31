@@ -231,7 +231,7 @@ const TradeReportTable = () => {
           current: currentPage,
           showSizeChanger: false,
           showTotal(total, range) {
-            return `Showing ${range[0]}-${range[1]} of ${total} actors`;
+            return `Showing ${range[0]}-${range[1]} of ${total} reports`;
           },
         }}
         onChange={(_pagination, _filters, sorter) => {
