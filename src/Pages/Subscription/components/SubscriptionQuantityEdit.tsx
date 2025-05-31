@@ -2,6 +2,7 @@ import useToaster from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InputNumber } from "antd";
+import useApp from "antd/es/app/useApp";
 import { useState } from "react";
 const SubscriptionQuantityEdit = ({
   record,
@@ -13,6 +14,8 @@ const SubscriptionQuantityEdit = ({
   const [quantity, setQuantity] = useState<number>(record.quantity);
   const queryClient = useQueryClient();
   const toaster = useToaster();
+  const { modal } = useApp();
+  // Ensure userId is defined
 
   const subscriptionMutation = useMutation({
     mutationKey: ["updateSubscriptionQuantity"],
@@ -42,9 +45,21 @@ const SubscriptionQuantityEdit = ({
   const handleSubmit = () => {
     if (quantity === null || quantity === record.quantity) return;
 
-    subscriptionMutation.mutate({
-      id: record.id,
-      quantity: quantity,
+    modal.confirm({
+      title: "Confirm Update",
+      content: `Are you sure you want to update the quantity from ${record.quantity} to ${quantity}?`,
+      onOk: () => {
+        subscriptionMutation.mutate({
+          id: record.id,
+          quantity: quantity,
+        });
+      },
+      onCancel: () => {
+        setQuantity(record.quantity);
+      },
+      okButtonProps: {
+        autoFocus: true,
+      },
     });
   };
 
@@ -55,7 +70,6 @@ const SubscriptionQuantityEdit = ({
       value={quantity}
       onChange={handleQuantityChange}
       onPressEnter={handleSubmit}
-      onBlur={handleSubmit}
       disabled={subscriptionMutation.isPending}
       style={{ width: "100px" }}
     />

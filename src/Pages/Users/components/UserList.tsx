@@ -9,7 +9,8 @@ import {
   Trash,
 } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Input, message, Modal, Table, Tag } from "antd";
+import { Button, Input, message, Table, Tag } from "antd";
+import useApp from "antd/es/app/useApp";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useState } from "react";
@@ -34,6 +35,7 @@ const Users = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | undefined>(
     undefined
   );
+  const { modal } = useApp();
 
   const navigate = useNavigate();
 
@@ -117,7 +119,7 @@ const Users = () => {
   };
 
   const handleDeleteUser = (userId: number) => {
-    Modal.confirm({
+    modal.confirm({
       title: "Are you sure you want to delete this user?",
       content: "This action cannot be undone.",
       okText: "Yes, Delete",
