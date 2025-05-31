@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, Input, Switch, Tag } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
+import { useLocalStorage } from "usehooks-ts";
 import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
 import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
@@ -14,7 +15,10 @@ import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 const PAGE_LIMIT = 12;
 
 const UserSubscription = () => {
-  const [activeOnly, setActiveOnly] = useState(false);
+  const [activeOnly, setActiveOnly] = useLocalStorage<boolean>(
+    "subscription-activeOnly",
+    false
+  );
   const { userId, userName } = useParams();
 
   const { data: user } = useQuery({
