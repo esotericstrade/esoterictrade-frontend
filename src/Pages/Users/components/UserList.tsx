@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import UserFormModal from "./UserFormModal";
 
-const PAGE_LIMIT = 12;
+const PAGE_LIMIT = 20;
 
 const Users = () => {
   const queryClient = useQueryClient();

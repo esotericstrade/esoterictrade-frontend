@@ -12,7 +12,7 @@ import AddNewSubscription from "./AddNewSubscription";
 import SubscriptionQuantityEdit from "./SubscriptionQuantityEdit";
 import SubscriptionStatusToggle from "./SubscriptionStatusToggle";
 
-const PAGE_LIMIT = 12;
+const PAGE_LIMIT = 20;
 
 const UserSubscription = () => {
   const [activeOnly, setActiveOnly] = useLocalStorage<boolean>(

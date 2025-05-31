@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import AddNewActorModal from "./components/AddNewActor";
 
-const PAGE_LIMIT = 12;
+const PAGE_LIMIT = 20;
 
 const Actors = () => {
   const [currentPage, setCurrentPage] = useState(1);
