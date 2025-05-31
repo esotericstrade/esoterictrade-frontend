@@ -107,6 +107,19 @@
   }
 }
 
+.tradeco-popover {
+  .ant-popover-arrow {
+    --antd-arrow-background-color: #d1d5db;
+  }
+  .ant-popover-content {
+    @apply rounded-xl p-1 bg-gray-200 border border-gray-300 shadow-xl;
+
+    .ant-popover-inner {
+      @apply bg-white border border-gray-200 shadow-none;
+    }
+  }
+}
+
 .tradeco-table {
   .ant-table {
     @apply border border-gray-500/[0.35] rounded-lg overflow-hidden;

@@ -49,6 +49,11 @@ export const antdConfig: ConfigProviderProps = {
   modal: {
     className: "tradeco-modal",
   },
+  popover: {
+    classNames: {
+      root: "tradeco-popover",
+    },
+  },
   spin: {
     indicator: <Spinner className="animate-spin" />,
   },
