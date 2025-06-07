@@ -6,7 +6,7 @@ import {
 } from "@/utils/api/webhook/constant";
 import { webhookService } from "@/utils/api/webhook/service";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { App, Button, Form, Modal, Select } from "antd";
+import { App, Button, Form, Modal, Select, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -141,9 +141,11 @@ const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
             </Select>
           </Form.Item>
           <Form.Item
-            label="Symbol"
+            label="Instrument Name"
             name="symbol"
-            rules={[{ required: true, message: "Please input symbol!" }]}
+            rules={[
+              { required: true, message: "Please input instrument name!" },
+            ]}
           >
             <Select
               showSearch
@@ -155,8 +157,20 @@ const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
               loading={isFetching}
               placeholder="Search instrument from actors"
               options={actors.map((actor) => ({
-                label: actor.instrument_name,
-                value: actor.id,
+                label: (
+                  <div className="flex items-center gap-2 justify-between">
+                    <span>{actor.instrument_name}</span>
+                    <span className="flex items-center gap-1">
+                      <Tag color="red" className="!text-xs !px-1 !me-0">
+                        {actor.parameters.stoploss}
+                      </Tag>
+                      <Tag color="green" className="!text-xs !px-1 !me-0">
+                        {actor.parameters.target}
+                      </Tag>
+                    </span>
+                  </div>
+                ),
+                value: actor.instrument_name,
                 "data-search": actor.instrument_name + "_" + actor.name,
               }))}
             />
