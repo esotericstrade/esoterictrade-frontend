@@ -1,6 +1,7 @@
 // src/Pages/Users/index.tsx
 import { actorService } from "@/utils/api/actor/service";
 import { PlusOutlined } from "@ant-design/icons";
+import { PencilLine } from "@phosphor-icons/react/dist/ssr";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Input, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -8,12 +9,15 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import AddNewActorModal from "./components/AddNewActor";
+import UpdateActorModal from "./components/UpdateActorModal";
 
 const PAGE_LIMIT = 20;
 
 const Actors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [selectedActor, setSelectedActor] = useState<Actor | null>(null);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
 
   const [debouncedSearch] = useDebounceValue(search, 500);
 
@@ -72,14 +76,32 @@ const Actors = () => {
     },
     {
       title: "Parameters",
+      align: "end",
       render: (_, record) => {
         return (
-          <div>
-            <Tag color="red">SL:&nbsp;{record.parameters.stoploss}</Tag>
+          <div className="flex items-center gap-2 justify-end">
+            <Tag className="me-0" color="red">
+              SL:&nbsp;{record.parameters.stoploss}
+            </Tag>
             {record.parameters.ltp && (
-              <Tag color="yellow">LTP:&nbsp;{record.parameters.ltp}</Tag>
+              <Tag className="me-0" color="yellow">
+                LTP:&nbsp;{record.parameters.ltp}
+              </Tag>
             )}
-            <Tag color="green">Target:&nbsp;{record.parameters.target}</Tag>
+            <Tag className="me-0" color="green">
+              Target:&nbsp;{record.parameters.target}
+            </Tag>
+
+            <button
+              className="flex items-center justify-center p-1 text-blue-600 border border-gray-200 rounded hover:bg-gray-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedActor(record);
+                setUpdateModalOpen(true);
+              }}
+            >
+              <PencilLine size={14} />
+            </button>
           </div>
         );
       },
@@ -95,7 +117,13 @@ const Actors = () => {
             ? "ascend"
             : "descend"
           : undefined,
-      render: (date) => dayjs(date).format("DD MMM YYYY"),
+      align: "end",
+      render: (date) => (
+        <span>
+          {dayjs(date).format("DD MMM YYYY ")}
+          <span className="text-gray-400">{dayjs(date).format("hh:mm A")}</span>
+        </span>
+      ),
     },
   ];
 
@@ -159,6 +187,14 @@ const Actors = () => {
             setSortField(undefined);
             setSortOrder(undefined);
           }
+        }}
+      />
+      <UpdateActorModal
+        actor={selectedActor}
+        open={updateModalOpen}
+        onClose={() => {
+          setUpdateModalOpen(false);
+          setSelectedActor(null);
         }}
       />
     </div>
