@@ -204,6 +204,8 @@ type Exchange = "NFO" | "NSE";
 type Product = "NRML" | "MIS";
 
 type ReportResponse = {
+  error?: string;
+  errorType?: string;
   body: ReportResponseBody;
   executionTimeMs: number;
 };

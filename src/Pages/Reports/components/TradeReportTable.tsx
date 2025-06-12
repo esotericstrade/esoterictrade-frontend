@@ -1,7 +1,7 @@
 // src/Pages/Users/index.tsx
 import { reportService } from "@/utils/api/report/service";
 import { useQuery } from "@tanstack/react-query";
-import { Input, Popover, Table, Tag } from "antd";
+import { Input, Popover, Table, Tag, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -114,6 +114,18 @@ const TradeReportTable = () => {
       title: "Response",
       dataIndex: "response",
       render: (response: TradeReport["response"]) => {
+        if (response.error && response.errorType) {
+          return (
+            <Tooltip
+              title={<div className="text-xs">{response.errorType}</div>}
+            >
+              <Tag color="red" className="cursor-pointer">
+                {response.error}
+              </Tag>
+            </Tooltip>
+          );
+        }
+
         if (!response || !response.body || !response.body.results) {
           return <span className="text-gray-300">---</span>;
         }
@@ -130,15 +142,29 @@ const TradeReportTable = () => {
                 trigger={"hover"}
                 placement="left"
                 content={
-                  <div className="grid gap-1">
-                    <p className="text-gray-700 font-semibold border-b pb-1 border-b-gray-200 uppercase tracking-wider text-xs">
-                      Users ({successResponses.length})
+                  <div className="grid gap-1 max-w-64">
+                    <p className="text-emerald-600 font-semibold border-b pb-1 border-b-emerald-600 text-sm">
+                      Success results ({successResponses.length}):
                     </p>
 
                     {successResponses.map((result, index) => (
-                      <span key={index} className="text-gray-600">
-                        {result.username}
-                      </span>
+                      <div
+                        className="flex flex-col gap-1 border-b border-b-gray-200 pb-1"
+                        key={result.username}
+                      >
+                        <span
+                          key={index}
+                          className="text-gray-800 font-medium text-sm"
+                        >
+                          <span className="text-gray-500 text-xs me-0.5">
+                            {index + 1}.
+                          </span>
+                          {result.username}
+                        </span>
+                        <p className="text-gray-600 text-xs font-regular">
+                          {result.message}
+                        </p>
+                      </div>
                     ))}
                   </div>
                 }
@@ -153,14 +179,29 @@ const TradeReportTable = () => {
                 trigger={"hover"}
                 placement="right"
                 content={
-                  <div className="grid gap-1">
-                    <p className="text-gray-700 font-semibold border-b pb-1 border-b-gray-200 uppercase tracking-wider text-xs">
-                      Users ({failedResponses.length})
+                  <div className="grid gap-1 max-w-64">
+                    <p className="text-rose-600 font-semibold border-b pb-1 border-b-rose-600 text-sm">
+                      Failed results ({failedResponses.length}):
                     </p>
+
                     {failedResponses.map((result, index) => (
-                      <span key={index} className="text-gray-600">
-                        {result.username}
-                      </span>
+                      <div
+                        className="flex flex-col gap-1 border-b border-b-gray-200 pb-1"
+                        key={result.username}
+                      >
+                        <span
+                          key={index}
+                          className="text-gray-800 font-medium text-sm"
+                        >
+                          <span className="text-gray-500 text-xs me-0.5">
+                            {index + 1}.
+                          </span>
+                          {result.username}
+                        </span>
+                        <p className="text-gray-600 text-xs font-regular">
+                          {result.error}
+                        </p>
+                      </div>
                     ))}
                   </div>
                 }
