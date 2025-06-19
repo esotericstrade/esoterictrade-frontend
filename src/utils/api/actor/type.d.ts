@@ -2,6 +2,7 @@ type ActorParameters = {
   ltp: string;
   stoploss: string;
   target: string;
+  tick_size: string;
 };
 
 interface Actor {

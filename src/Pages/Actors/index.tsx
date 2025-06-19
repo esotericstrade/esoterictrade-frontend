@@ -80,6 +80,11 @@ const Actors = () => {
       render: (_, record) => {
         return (
           <div className="flex items-center gap-2 justify-end">
+            {record.parameters.tick_size && (
+              <Tag className="me-0" color="blue">
+                Tick Size:&nbsp;{record.parameters.tick_size}
+              </Tag>
+            )}
             <Tag className="me-0" color="red">
               SL:&nbsp;{record.parameters.stoploss}
             </Tag>
@@ -91,7 +96,6 @@ const Actors = () => {
             <Tag className="me-0" color="green">
               Target:&nbsp;{record.parameters.target}
             </Tag>
-
             <button
               className="flex items-center justify-center p-1 text-blue-600 border border-gray-200 rounded hover:bg-gray-100"
               onClick={(e) => {

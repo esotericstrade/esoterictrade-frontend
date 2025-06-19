@@ -25,6 +25,8 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({
         parameters: {
           stoploss: actor.parameters.stoploss,
           target: actor.parameters.target,
+          ltp: actor.parameters.ltp,
+          tick_size: actor.parameters.tick_size,
         },
       });
     }
@@ -51,6 +53,7 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({
           stoploss: values.parameters.stoploss,
           target: values.parameters.target,
           ltp: actor?.parameters.ltp || "",
+          tick_size: values.parameters.tick_size || "",
         },
       });
       form.resetFields();
@@ -94,7 +97,7 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({
         layout="vertical"
         className="grid grid-cols-1 gap-3"
       >
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-1 gap-x-3">
           <Form.Item
             label="Stoploss"
             name={["parameters", "stoploss"]}
@@ -119,6 +122,19 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({
               step={0.1}
               className="w-full"
               placeholder="Enter target"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Tick Size"
+            name={["parameters", "tick_size"]}
+            rules={[{ required: true, message: "Please input Tick Size!" }]}
+            required
+          >
+            <InputNumber
+              min={0}
+              step={0.1}
+              className="w-full"
+              placeholder="Enter Tick Size"
             />
           </Form.Item>
         </div>
