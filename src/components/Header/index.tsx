@@ -7,23 +7,13 @@ const Header = () => {
   return (
     <AntdHeader className="flex flex-row justify-between items-center  h-[70px] bg-white col-span-2 p-0 px-5">
       <div className="flex items-center gap-8">
-        <svg
-          width={45}
-          height={45}
-          viewBox="0 0 45 45"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="flex-grow-0 flex-shrink-0"
-          preserveAspectRatio="none"
-        >
-          <circle
-            cx="22.2538"
-            cy="22.4999"
-            r="21.7538"
-            fill="#F5F6F8"
-            stroke="#E8EAED"
-          />
-        </svg>
+        <img
+          src="/logo.svg"
+          width={200}
+          height={64}
+          alt="Logo"
+          className="w-[120px] h-[40px]"
+        />
         <Input
           placeholder="Search..."
           allowClear
