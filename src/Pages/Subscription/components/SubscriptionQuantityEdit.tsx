@@ -30,8 +30,10 @@ const SubscriptionQuantityEdit = ({
       });
       toaster.success(`Quantity updated to ${data.quantity}`);
     },
-    onError: () => {
-      toaster.error("Error updating quantity");
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
+      toaster.error(`Error updating quantity: ${errorMessage}`);
       // Reset to previous value on error
       setQuantity(record.quantity);
     },
@@ -42,12 +44,27 @@ const SubscriptionQuantityEdit = ({
     setQuantity(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (quantity === null || quantity === record.quantity) return;
 
     modal.confirm({
-      title: "Confirm Update",
-      content: `Are you sure you want to update the quantity from ${record.quantity} to ${quantity}?`,
+      title: "Confirm Quantity Change",
+      content: (
+        <div>
+          <p>Are you sure you want to update the subscription quantity?</p>
+          <p>
+            <strong>Instrument:</strong> {record.actor.instrument_name}
+          </p>
+          <p>
+            <strong>Current Quantity:</strong> {record.quantity}
+          </p>
+          <p>
+            <strong>New Quantity:</strong> {quantity}
+          </p>
+        </div>
+      ),
       onOk: () => {
         subscriptionMutation.mutate({
           id: record.id,
@@ -64,15 +81,22 @@ const SubscriptionQuantityEdit = ({
   };
 
   return (
-    <InputNumber
-      size="small"
-      min={1}
-      value={quantity}
-      onChange={handleQuantityChange}
-      onPressEnter={handleSubmit}
-      disabled={subscriptionMutation.isPending}
-      style={{ width: "100px" }}
-    />
+    <div className="flex items-center">
+      <InputNumber
+        size="small"
+        min={1}
+        value={quantity}
+        onChange={handleQuantityChange}
+        onPressEnter={handleSubmit}
+        disabled={subscriptionMutation.isPending}
+        style={{ width: "100px" }}
+      />
+      {subscriptionMutation.isPending && (
+        <div className="ml-2">
+          <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+        </div>
+      )}
+    </div>
   );
 };
 
