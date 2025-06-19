@@ -4,10 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Input, Popover, Table, Tag, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
 const PAGE_LIMIT = 20;
+
+dayjs.extend(utc);
 
 const TradeReportTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -227,12 +230,15 @@ const TradeReportTable = () => {
             ? "ascend"
             : "descend"
           : undefined,
-      render: (date) => (
-        <span className="text-gray-600">
-          {dayjs(date).format("DD MMM YYYY ")}
-          <span className="text-gray-400">{dayjs(date).format("hh:mm A")}</span>
-        </span>
-      ),
+      render: (date) => {
+        const dateIST = dayjs.utc(date).local();
+        return (
+          <span className="text-gray-600">
+            {dateIST.format("DD MMM YYYY ")}
+            <span className="text-gray-400">{dateIST.format("hh:mm A")}</span>
+          </span>
+        );
+      },
     },
   ];
 
