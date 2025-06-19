@@ -37,9 +37,21 @@ const SubscriptionStatusToggle = ({
   const handleToggle = (checked: boolean) => {
     modal.confirm({
       title: "Confirm Update",
-      content: `Are you sure you want to ${
-        checked ? "activate" : "deactivate"
-      } this subscription?`,
+      content: (
+        <p>
+          Are you sure you want to
+          {checked ? (
+            <span className="text-emerald-600 mx-1 underline font-medium">
+              activate
+            </span>
+          ) : (
+            <span className="text-rose-600 mx-1 underline font-medium">
+              deactivate
+            </span>
+          )}
+          this subscription?
+        </p>
+      ),
       onOk: () => {
         subscriptionMutation.mutate({
           id: record.id,

@@ -1,7 +1,8 @@
 import useToaster from "@/components/toaster";
 import { subscriptionService } from "@/utils/api/subscription/service";
+import { KeyReturn, Spinner } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { InputNumber } from "antd";
+import { InputNumber, Tooltip } from "antd";
 import useApp from "antd/es/app/useApp";
 import { useState } from "react";
 const SubscriptionQuantityEdit = ({
@@ -54,15 +55,23 @@ const SubscriptionQuantityEdit = ({
       content: (
         <div>
           <p>Are you sure you want to update the subscription quantity?</p>
-          <p>
-            <strong>Instrument:</strong> {record.actor.instrument_name}
-          </p>
-          <p>
-            <strong>Current Quantity:</strong> {record.quantity}
-          </p>
-          <p>
-            <strong>New Quantity:</strong> {quantity}
-          </p>
+          <div className="grid grid-cols-[auto_1fr] gap-y-0.5 mt-2 gap-x-2">
+            <>
+              <span className="text-gray-400">Instrument:</span>
+              <span className="font-medium">
+                {record.actor.instrument_name}
+              </span>
+            </>
+
+            <>
+              <span className="text-gray-400">Current Quantity:</span>
+              <span className="font-medium">{record.quantity}</span>
+            </>
+            <>
+              <span className="text-gray-400">New Quantity:</span>
+              <span className="font-medium">{quantity}</span>
+            </>
+          </div>
         </div>
       ),
       onOk: () => {
@@ -89,13 +98,18 @@ const SubscriptionQuantityEdit = ({
         onChange={handleQuantityChange}
         onPressEnter={handleSubmit}
         disabled={subscriptionMutation.isPending}
-        style={{ width: "100px" }}
       />
-      {subscriptionMutation.isPending && (
-        <div className="ml-2">
-          <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
-        </div>
-      )}
+      <div className="w-5 flex items-center justify-center ms-2">
+        {subscriptionMutation.isPending ? (
+          <Spinner className="animate-spin" size={16} />
+        ) : (
+          quantity !== record.quantity && (
+            <Tooltip title="Press Enter to save changes">
+              <KeyReturn className="text-gray-400" size={16} weight="bold" />
+            </Tooltip>
+          )
+        )}
+      </div>
     </div>
   );
 };
