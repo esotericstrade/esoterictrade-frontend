@@ -71,6 +71,9 @@
   }
 
   &.ant-modal-confirm {
+    .ant-modal-confirm-title {
+      @apply pb-2.5 border-b border-b-gray-200;
+    }
     .ant-modal-content {
       .ant-modal-confirm-btns {
         @apply grid grid-cols-2 gap-1 border-t border-t-gray-200 pt-3 mt-5;
