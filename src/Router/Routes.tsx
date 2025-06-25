@@ -3,6 +3,7 @@ import Actors from "@/Pages/Actors";
 import Auth from "@/Pages/Auth";
 import Brokers from "@/Pages/Brokers";
 import Dashboard from "@/Pages/Dashboard";
+import Positions from "@/Pages/Positions";
 import ReportsPage from "@/Pages/Reports";
 import Strategies from "@/Pages/Strategies";
 import Subscription from "@/Pages/Subscription";
@@ -56,6 +57,10 @@ export const PRIVATE_ROUTES: RouteObject[] = [
   {
     path: "/reports/*",
     element: <ReportsPage />,
+  },
+  {
+    path: "/positions/*",
+    element: <Positions />,
   },
   {
     path: "*",

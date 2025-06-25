@@ -2,17 +2,20 @@
 import { adminService } from "@/utils/api/admin/service";
 import { PlusOutlined } from "@ant-design/icons";
 import {
+  DotsThreeOutlineVertical,
   LockKey,
   LockKeyOpen,
   MagnifyingGlass,
   Pencil,
   Trash,
 } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Input, message, Table, Tag } from "antd";
+import { Button, Dropdown, Input, message, Table, Tag } from "antd";
 import useApp from "antd/es/app/useApp";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
@@ -141,13 +144,12 @@ const Users = () => {
     });
   };
 
-  const onRow = (record: User) => {
-    return {
-      onClick: () => {
-        // Handle row click
-        navigate(`/subscription/${record.username}/${record.id}`);
-      },
-    };
+  const gotoSubscription = (record: User) => {
+    navigate(`/subscription/${record.username}/${record.id}`);
+  };
+
+  const gotoPositions = (record: User) => {
+    navigate(`/positions/${record.username}/${record.id}`);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,10 +204,94 @@ const Users = () => {
       ),
     },
     {
+      title: "Subscription",
+      key: "subscription",
+      dataIndex: "subscription",
+      render: (_, record) => (
+        <span
+          className="flex items-center gap-0.5 text-blue-600 hover:underline cursor-pointer"
+          role="link"
+          onClick={() => gotoSubscription(record)}
+        >
+          Subscriptions <ArrowRight size={14} weight="bold" />
+        </span>
+      ),
+    },
+    {
+      title: "Positions",
+      key: "positions",
+      dataIndex: "positions",
+      render: (_, record) => (
+        <span
+          className="flex items-center gap-0.5 text-blue-600 hover:underline cursor-pointer"
+          role="link"
+          onClick={() => gotoPositions(record)}
+        >
+          Positions <ArrowRight size={14} weight="bold" />
+        </span>
+      ),
+    },
+
+    {
+      title: "Actions",
+      key: "actions",
+      align: "center",
+      width: 60,
+      render: (_, record) => (
+        <div className="grid place-items-center">
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "edit",
+                  label: "Edit User",
+                  icon: <Pencil size={14} />,
+                  onClick: () => handleEditUser(record),
+                },
+                {
+                  key: "deactivate",
+                  label: record.is_active ? "Deactivate User" : "Activate User",
+                  icon: record.is_active ? (
+                    <LockKey size={14} />
+                  ) : (
+                    <LockKeyOpen size={14} />
+                  ),
+                  onClick: () =>
+                    record.is_active
+                      ? handleDeactivateUser(record.id)
+                      : () => {
+                          /* Handle activate */
+                        },
+                },
+                {
+                  key: "delete",
+                  label: "Delete User",
+                  icon: <Trash size={14} />,
+                  danger: true,
+                  onClick: () => handleDeleteUser(record.id),
+                },
+              ],
+            }}
+            trigger={["hover"]}
+            placement="bottomRight" // Adjust placement as needed
+            className="cursor-pointer"
+          >
+            <Button
+              size="small"
+              className="!rounded-md"
+              icon={<DotsThreeOutlineVertical weight="bold" size={14} />}
+            />
+          </Dropdown>
+        </div>
+      ),
+    },
+    {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
       sorter: true,
+      align: "end",
+      width: 180,
       sortOrder:
         sortField === "created_at"
           ? sortOrder === "asc"
@@ -214,50 +300,15 @@ const Users = () => {
             ? "descend"
             : undefined
           : undefined,
-      render: (d) =>
-        Array.isArray(d)
-          ? new Date(d[0], d[1] - 1, d[2]).toLocaleDateString()
-          : "Invalid",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_, record) => (
-        <div
-          className="flex items-center gap-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Button
-            size="small"
-            type="primary"
-            icon={<Pencil weight="bold" />}
-            onClick={() => handleEditUser(record)}
-          />
-          {record.is_active ? (
-            <Button
-              size="small"
-              className="bg-amber-600 text-white"
-              icon={<LockKey weight="bold" />}
-              onClick={() => handleDeactivateUser(record.id)}
-            />
-          ) : (
-            <Button
-              size="small"
-              className="bg-amber-600 text-white"
-              icon={<LockKeyOpen weight="bold" />}
-              onClick={() => {
-                /* Handle activate */
-              }}
-            />
-          )}
-          <Button
-            size="small"
-            className="bg-rose-600 text-white"
-            icon={<Trash weight="bold" />}
-            onClick={() => handleDeleteUser(record.id)}
-          />
-        </div>
-      ),
+      render: (d) => {
+        const dt = dayjs(d);
+        return (
+          <div>
+            {dt.format("DD MMM YYYY ")}
+            <span className="text-gray-400">{dt.format("HH:mm A")}</span>
+          </div>
+        );
+      },
     },
   ];
 
@@ -314,8 +365,6 @@ const Users = () => {
         columns={columns}
         dataSource={data.data}
         rowKey="id"
-        onRow={onRow}
-        rowClassName={"cursor-pointer"}
         pagination={{
           onChange: (page) => {
             setCurrentPage(page);
