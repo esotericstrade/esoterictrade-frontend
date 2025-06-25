@@ -206,7 +206,7 @@ const BulkPositions = () => {
         })}
         rowClassName={(record) =>
           clsx(
-            expandedRowKeys.includes(record.user_id) ? "bg-primary-100" : "",
+            expandedRowKeys.includes(record.user_id) ? "bg-primary-200" : "",
             "cursor-pointer"
           )
         }
