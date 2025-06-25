@@ -162,7 +162,7 @@ const expandedRowRender = (positions: Position[]) => {
 
 const BulkPositions = () => {
   const [current, setCurrent] = useState(1);
-  const [expandedRowKey, setExpandedRowKey] = useState<number | null>(null);
+  const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([]);
 
   const { data, isFetching } = useQuery({
     queryKey: [
@@ -193,18 +193,20 @@ const BulkPositions = () => {
         expandable={{
           expandedRowRender: (record) => expandedRowRender(record.positions),
           rowExpandable: (record) => record.positions.length > 0,
-          expandedRowKeys: expandedRowKey ? [expandedRowKey] : [],
+          expandedRowKeys: expandedRowKeys,
         }}
         onRow={(record) => ({
           onClick: () => {
-            setExpandedRowKey((prev) =>
-              prev !== record.user_id ? record.user_id : null
+            setExpandedRowKeys((prev) =>
+              prev.includes(record.user_id)
+                ? prev.filter((id) => id !== record.user_id)
+                : [...prev, record.user_id]
             );
           },
         })}
         rowClassName={(record) =>
           clsx(
-            record.user_id === expandedRowKey ? "bg-primary-100" : "",
+            expandedRowKeys.includes(record.user_id) ? "bg-primary-100" : "",
             "cursor-pointer"
           )
         }
