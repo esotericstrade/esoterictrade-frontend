@@ -32,9 +32,15 @@ export const userAdminBrokerService = {
     return await apiClient.get<Margin[]>(`/api/user-broker/kite/margins`);
   },
   getBulkUserPositions: async (page: number = 1, size: number = 20) => {
-    return await apiClient.get<PaginatedResponse<Position>>(
-      `/api/admin-broker/kite/positions?page=${page}&size=${size}`
-    );
+    return await apiClient.get<
+      PaginatedResponse<{
+        data: Array<{
+          positions: Position[];
+          user_id: number;
+          username: string;
+        }>;
+      }>
+    >(`/api/admin-broker/kite/positions?page=${page}&size=${size}`);
   },
   getBulkUserHoldings: async (page: number = 1, size: number = 20) => {
     return await apiClient.get<PaginatedResponse<Holding>>(
