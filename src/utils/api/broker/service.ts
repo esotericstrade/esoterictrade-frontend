@@ -2,9 +2,11 @@ import { apiClient } from "../apiClient";
 
 export const userAdminBrokerService = {
   getUserPositionsById: async (userId: number) => {
-    return await apiClient.get<Position[]>(
-      `/api/admin-broker/kite/users/${userId}/positions`
-    );
+    return (
+      await apiClient.get<{ positions: Position[] }>(
+        `/api/admin-broker/kite/users/${userId}/positions`
+      )
+    ).positions;
   },
   getUserHoldingsById: async (userId: number) => {
     return await apiClient.get<Holding[]>(
@@ -17,7 +19,11 @@ export const userAdminBrokerService = {
     );
   },
   getCurrentUserPositions: async () => {
-    return await apiClient.get<Position[]>(`/api/user-broker/kite/positions`);
+    return (
+      await apiClient.get<{ positions: Position[] }>(
+        `/api/user-broker/kite/positions`
+      )
+    ).positions;
   },
   getCurrentUserHoldings: async () => {
     return await apiClient.get<Holding[]>(`/api/user-broker/kite/holdings`);
