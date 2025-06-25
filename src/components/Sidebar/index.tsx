@@ -17,8 +17,8 @@ import {
 } from "@phosphor-icons/react";
 import { Button, Divider, Menu } from "antd";
 import clsx from "clsx";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import PlaceOrderWrapper from "../PlaceOrderWrapper";
 
 const MENU_ITEMS = [
@@ -80,8 +80,23 @@ const MENU_ITEMS = [
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { onLogout, user } = useAuthContext();
   const [open, setOpen] = useState(false);
+  const [activeStep, setActiveStep] =
+    useState<(typeof MENU_ITEMS)[number]["key"]>("dashboard");
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const currentItem = MENU_ITEMS.find((item) =>
+      currentPath.startsWith(item.href)
+    );
+    if (currentItem) {
+      setActiveStep(currentItem.key);
+    } else {
+      setActiveStep("dashboard"); // Default to dashboard if no match found
+    }
+  }, [location.pathname]);
 
   return (
     <aside className="w-[220px] bg-white px-4 py-5 overflow-y-auto flex flex-col h-[calc(100vh-70px)]">
@@ -100,6 +115,7 @@ const Sidebar = () => {
       <Divider className="my-3" />
 
       <Menu
+        selectedKeys={[activeStep]}
         items={MENU_ITEMS.map(({ key, icon: Icon, label, href }) => ({
           key,
           icon: <Icon size={16} weight="duotone" />,
