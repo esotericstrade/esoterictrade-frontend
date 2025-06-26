@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Popover, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
+import clsx from "clsx";
 
 const UserPosition = () => {
   const { userId, userName } = useParams();
@@ -126,14 +127,13 @@ const UserPosition = () => {
               </div>
             }
           >
-            <span className="text-blue-600 underline cursor-pointer font-medium">
+            <span className={clsx(isSell ? "text-orange-600" : "text-blue-600", "underline cursor-pointer font-medium")}>
               {formatNumber(record.net_quantity)}
             </span>
           </Popover>
         );
       },
     },
-
     {
       title: "Average Price",
       dataIndex: "average_price",
