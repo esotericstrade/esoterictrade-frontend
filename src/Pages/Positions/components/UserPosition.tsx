@@ -53,9 +53,10 @@ const UserPosition = () => {
       key: "product",
       render: (product) => (
         <Tag
-          className={clsx({
-            "bg-blue-600 text-white border border-blue-800": product === "NRML",
-            "bg-orange-600 text-white border border-orange-800":
+          className={clsx("font-medium", {
+            "bg-blue-100 text-blue-600 border border-blue-700":
+              product === "NRML",
+            "bg-orange-100 text-orange-600 border border-orange-700":
               product === "OT",
           })}
         >
