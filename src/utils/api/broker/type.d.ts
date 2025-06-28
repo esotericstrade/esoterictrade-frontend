@@ -31,6 +31,17 @@ type Position = {
   average_price: number;
 };
 
+type PnLSummary = {
+  total_pnl: number;
+  position_count: number;
+  unrealised_pnl: number;
+  realised_pnl: number;
+  profitable_positions: number;
+  losing_positions: number;
+  max_position_profit: number;
+  max_position_loss: number;
+};
+
 type Holding = {
   // Add holding fields based on your API response
   id: string;

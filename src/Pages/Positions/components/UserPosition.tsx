@@ -4,8 +4,8 @@ import { userAdminBrokerService } from "@/utils/api/broker/service";
 import { useQuery } from "@tanstack/react-query";
 import { Popover, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useParams } from "react-router-dom";
 import clsx from "clsx";
+import { useParams } from "react-router-dom";
 
 const UserPosition = () => {
   const { userId, userName } = useParams();
@@ -37,23 +37,38 @@ const UserPosition = () => {
       title: "Trading Symbol",
       dataIndex: "trading_symbol",
       key: "trading_symbol",
-      render: (text) => <span className="font-semibold">{text}</span>,
+      render: (text, record) => (
+        <span className="font-semibold">
+          {text}
+          <span className="text-gray-400 font-normal text-xs ms-0.5">
+            {record.exchange}
+          </span>
+        </span>
+      ),
     },
-    {
-      title: "Exchange",
-      dataIndex: "exchange",
-      key: "exchange",
-    },
+
     {
       title: "Product",
       dataIndex: "product",
       key: "product",
+      render: (product) => (
+        <Tag
+          className={clsx({
+            "bg-blue-600 text-white border border-blue-800": product === "NRML",
+            "bg-orange-600 text-white border border-orange-800":
+              product === "OT",
+          })}
+        >
+          {product}
+        </Tag>
+      ),
     },
     {
       title: "Order Details",
       key: "order_details",
+      dataIndex: "net_quantity",
       align: "end",
-      render: (_, record) => {
+      render: (net_quantity, record) => {
         const isBuy = record.buy_quantity > 0;
         const isSell = record.sell_quantity > 0;
 
@@ -127,20 +142,30 @@ const UserPosition = () => {
               </div>
             }
           >
-            <span className={clsx(isSell ? "text-orange-600" : "text-blue-600", "underline cursor-pointer font-medium")}>
+            <span
+              className={clsx(
+                "tabular-nums",
+                "hover:underline cursor-pointer",
+                {
+                  "text-orange-600": net_quantity < 0,
+                  "text-blue-600": net_quantity > 0,
+                }
+              )}
+            >
               {formatNumber(record.net_quantity)}
             </span>
           </Popover>
         );
       },
     },
+
     {
       title: "Average Price",
       dataIndex: "average_price",
       key: "average_price",
       align: "end",
       render: (price) => (
-        <span className="font-medium text-end">{formatCurrency(price)}</span>
+        <span className="tabular-nums text-end">{formatCurrency(price)}</span>
       ),
     },
     {
@@ -149,24 +174,58 @@ const UserPosition = () => {
       key: "last_price",
       align: "end",
       render: (price) => (
-        <span className="font-medium text-end">{formatCurrency(price)}</span>
+        <span className="tabular-nums text-end">{formatCurrency(price)}</span>
       ),
     },
-
     {
-      title: "Unrealised P&L",
-      dataIndex: "unrealised",
-      key: "unrealised",
+      title: "Realized PnL",
+      dataIndex: "realised",
+      key: "realized_pnl",
       align: "end",
-      render: (unrealised) => formatCurrency(unrealised),
+      render: (realised) => (
+        <span
+          className={clsx("tabular-nums", {
+            "text-gray-400": realised === 0,
+            "text-emerald-600": realised > 0,
+            "text-rose-600": realised < 0,
+          })}
+        >
+          {formatCurrency(realised)}
+        </span>
+      ),
     },
     {
-      title: "P&L",
-      dataIndex: "pnl",
-      key: "pnl",
+      title: "Unrealized PnL",
+      dataIndex: "unrealised",
+      key: "unrealized_pnl",
       align: "end",
-      render: (pnl) => (
-        <Tag color={pnl >= 0 ? "green" : "red"}>{formatCurrency(pnl)}</Tag>
+      render: (unrealised) => (
+        <span
+          className={clsx("tabular-nums", {
+            "text-gray-400": unrealised === 0,
+            "text-emerald-600": unrealised > 0,
+            "text-rose-600": unrealised < 0,
+          })}
+        >
+          {formatCurrency(unrealised)}
+        </span>
+      ),
+    },
+    {
+      title: "Total P&L",
+      dataIndex: "pnl",
+      key: "total_pnl",
+      align: "end",
+      render: (total_pnl) => (
+        <span
+          className={clsx("tabular-nums font-medium", {
+            "text-gray-400": total_pnl === 0,
+            "text-emerald-600": total_pnl > 0,
+            "text-rose-600": total_pnl < 0,
+          })}
+        >
+          {formatCurrency(total_pnl)}
+        </span>
       ),
     },
   ];

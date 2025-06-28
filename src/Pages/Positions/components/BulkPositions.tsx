@@ -14,23 +14,38 @@ const expandedRowRender = (positions: Position[]) => {
       title: "Trading Symbol",
       dataIndex: "trading_symbol",
       key: "trading_symbol",
-      render: (text) => <span className="font-semibold">{text}</span>,
+      render: (text, record) => (
+        <span className="font-semibold">
+          {text}
+          <span className="text-gray-400 font-normal text-xs ms-0.5">
+            {record.exchange}
+          </span>
+        </span>
+      ),
     },
-    {
-      title: "Exchange",
-      dataIndex: "exchange",
-      key: "exchange",
-    },
+
     {
       title: "Product",
       dataIndex: "product",
       key: "product",
+      render: (product) => (
+        <Tag
+          className={clsx({
+            "bg-blue-600 text-white border border-blue-800": product === "NRML",
+            "bg-orange-600 text-white border border-orange-800":
+              product === "OT",
+          })}
+        >
+          {product}
+        </Tag>
+      ),
     },
     {
       title: "Order Details",
       key: "order_details",
+      dataIndex: "net_quantity",
       align: "end",
-      render: (_, record) => {
+      render: (net_quantity, record) => {
         const isBuy = record.buy_quantity > 0;
         const isSell = record.sell_quantity > 0;
 
@@ -104,7 +119,16 @@ const expandedRowRender = (positions: Position[]) => {
               </div>
             }
           >
-            <span className="text-blue-600 underline cursor-pointer font-medium">
+            <span
+              className={clsx(
+                "tabular-nums",
+                "hover:underline cursor-pointer",
+                {
+                  "text-orange-600": net_quantity < 0,
+                  "text-blue-600": net_quantity > 0,
+                }
+              )}
+            >
               {formatNumber(record.net_quantity)}
             </span>
           </Popover>
@@ -118,7 +142,7 @@ const expandedRowRender = (positions: Position[]) => {
       key: "average_price",
       align: "end",
       render: (price) => (
-        <span className="font-medium text-end">{formatCurrency(price)}</span>
+        <span className="tabular-nums text-end">{formatCurrency(price)}</span>
       ),
     },
     {
@@ -127,24 +151,58 @@ const expandedRowRender = (positions: Position[]) => {
       key: "last_price",
       align: "end",
       render: (price) => (
-        <span className="font-medium text-end">{formatCurrency(price)}</span>
+        <span className="tabular-nums text-end">{formatCurrency(price)}</span>
       ),
     },
-
     {
-      title: "Unrealised P&L",
-      dataIndex: "unrealised",
-      key: "unrealised",
+      title: "Realized PnL",
+      dataIndex: "realised",
+      key: "realized_pnl",
       align: "end",
-      render: (unrealised) => formatCurrency(unrealised),
+      render: (realised) => (
+        <span
+          className={clsx("tabular-nums", {
+            "text-gray-400": realised === 0,
+            "text-emerald-600": realised > 0,
+            "text-rose-600": realised < 0,
+          })}
+        >
+          {formatCurrency(realised)}
+        </span>
+      ),
     },
     {
-      title: "P&L",
-      dataIndex: "pnl",
-      key: "pnl",
+      title: "Unrealized PnL",
+      dataIndex: "unrealised",
+      key: "unrealized_pnl",
       align: "end",
-      render: (pnl) => (
-        <Tag color={pnl >= 0 ? "green" : "red"}>{formatCurrency(pnl)}</Tag>
+      render: (unrealised) => (
+        <span
+          className={clsx("tabular-nums", {
+            "text-gray-400": unrealised === 0,
+            "text-emerald-600": unrealised > 0,
+            "text-rose-600": unrealised < 0,
+          })}
+        >
+          {formatCurrency(unrealised)}
+        </span>
+      ),
+    },
+    {
+      title: "Total P&L",
+      dataIndex: "pnl",
+      key: "total_pnl",
+      align: "end",
+      render: (total_pnl) => (
+        <span
+          className={clsx("tabular-nums font-medium", {
+            "text-gray-400": total_pnl === 0,
+            "text-emerald-600": total_pnl > 0,
+            "text-rose-600": total_pnl < 0,
+          })}
+        >
+          {formatCurrency(total_pnl)}
+        </span>
       ),
     },
   ];
@@ -177,8 +235,6 @@ const BulkPositions = () => {
     },
     refetchOnWindowFocus: false,
   });
-
-  console.log("data", data?.data);
 
   return (
     <section>
@@ -217,28 +273,69 @@ const BulkPositions = () => {
             key: "username",
           },
           {
-            title: "Positions Count",
-            dataIndex: "positions",
-            key: "positions_count",
+            title: "Losing/Total Positions",
+            dataIndex: "pnl_summary",
+            key: "position_count",
             align: "end",
-            render: (positions) => positions.length,
+            render: ({ position_count, losing_positions }) => (
+              <div className="inline-flex justify-end items-center tabular-nums">
+                <span className="text-rose-600">{losing_positions}</span>
+                <span className="mx-1 text-gray-400">/</span>
+                <span>{position_count}</span>
+              </div>
+            ),
+          },
+          {
+            title: "Realized PnL",
+            dataIndex: "pnl_summary",
+            key: "realized_pnl",
+            align: "end",
+
+            render: ({ realised_pnl }) => (
+              <span
+                className={clsx("tabular-nums", {
+                  "text-gray-400": realised_pnl === 0,
+                  "text-emerald-600": realised_pnl > 0,
+                  "text-rose-600": realised_pnl < 0,
+                })}
+              >
+                {formatCurrency(realised_pnl)}
+              </span>
+            ),
+          },
+          {
+            title: "Unrealized PnL",
+            dataIndex: "pnl_summary",
+            key: "unrealized_pnl",
+            align: "end",
+            render: ({ unrealised_pnl }) => (
+              <span
+                className={clsx("tabular-nums", {
+                  "text-gray-400": unrealised_pnl === 0,
+                  "text-emerald-600": unrealised_pnl > 0,
+                  "text-rose-600": unrealised_pnl < 0,
+                })}
+              >
+                {formatCurrency(unrealised_pnl)}
+              </span>
+            ),
           },
           {
             title: "Total P&L",
-            dataIndex: "positions",
+            dataIndex: "pnl_summary",
             key: "total_pnl",
             align: "end",
-            render: (positions) => {
-              const totalPnl = positions.reduce(
-                (acc: number, position: Position) => acc + position.pnl,
-                0
-              );
-              return (
-                <Tag color={totalPnl >= 0 ? "green" : "red"}>
-                  {formatCurrency(totalPnl)}
-                </Tag>
-              );
-            },
+            render: ({ total_pnl }) => (
+              <Tag
+                className={clsx("tabular-nums font-medium", {
+                  "bg-gray-400 text-gray-600": total_pnl === 0,
+                  "bg-emerald-500 text-white": total_pnl > 0,
+                  "bg-rose-500 text-white": total_pnl < 0,
+                })}
+              >
+                {formatCurrency(total_pnl)}
+              </Tag>
+            ),
           },
         ]}
         loading={isFetching}

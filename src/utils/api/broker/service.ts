@@ -38,6 +38,7 @@ export const userAdminBrokerService = {
           positions: Position[];
           user_id: number;
           username: string;
+          pnl_summary: PnLSummary;
         }>;
       }>
     >(`/api/admin-broker/kite/positions?page=${page}&size=${size}`);
