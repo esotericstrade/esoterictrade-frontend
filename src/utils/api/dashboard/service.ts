@@ -53,6 +53,10 @@ export const dashboardService = {
     );
   },
 
+  getCumulativePnL: async (): Promise<CumulativePnL> => {
+    return await apiClient.get("/api/admin-broker/kite/cumulative-pnl");
+  },
+
   /**
    * Get all dashboard statistics in a single call
    * Makes multiple API calls in parallel and combines the results
