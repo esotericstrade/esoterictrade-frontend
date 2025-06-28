@@ -11,7 +11,6 @@ import {
 } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
-import clsx from "clsx";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router";
 
@@ -48,6 +47,8 @@ const AdminDashboard = () => {
       total_users: 0,
     },
   });
+
+  console.log("cumulativeProfitQuery.data", cumulativeProfitQuery.data);
 
   const { data, isLoading } = useQuery({
     queryKey: ["dashboardSummary"],
@@ -123,7 +124,7 @@ const AdminDashboard = () => {
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Users
           </h3>
-          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider">
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {new Intl.NumberFormat("en-IN", {
               notation: "compact",
               compactDisplay: "short",
@@ -167,7 +168,7 @@ const AdminDashboard = () => {
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Broker Accounts
           </h3>
-          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider">
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {new Intl.NumberFormat("en-IN", {
               notation: "compact",
               compactDisplay: "short",
@@ -211,7 +212,7 @@ const AdminDashboard = () => {
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Subscriptions
           </h3>
-          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider">
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {new Intl.NumberFormat("en-IN", {
               notation: "compact",
               compactDisplay: "short",
@@ -255,7 +256,7 @@ const AdminDashboard = () => {
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Actors
           </h3>
-          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider">
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {new Intl.NumberFormat("en-IN", {
               notation: "compact",
               compactDisplay: "short",
@@ -283,51 +284,29 @@ const AdminDashboard = () => {
               ease: [0.6, 0.05, -0.01, 0.9],
             },
           }}
-          onClick={() => navigate("/positions")}
+          onClick={() => navigate("/actors")}
           className="bg-white rounded-2xl shadow-[6px_6px_54px_0px_rgba(0,0,0,0.05)] p-6 flex flex-col gap-4 relative cursor-pointer"
         >
-          <div
-            className={clsx(
-              "rounded-3xl  absolute right-6 top-6 size-14 grid place-items-center ",
-              {
-                "bg-emerald-400/40": cumulativeProfitQuery.data.total_pnl > 0,
-                "bg-rose-400/40": cumulativeProfitQuery.data.total_pnl < 0,
-                "bg-gray-400/40": cumulativeProfitQuery.data.total_pnl === 0,
-              }
-            )}
-          >
+          <div className="rounded-3xl bg-emerald-400/40 absolute right-6 top-6 size-14 grid place-items-center ">
             <WaveTriangle
               size={32}
-              className={clsx({
-                "text-emerald-800": cumulativeProfitQuery.data.total_pnl > 0,
-                "text-rose-800": cumulativeProfitQuery.data.total_pnl < 0,
-                "text-gray-800": cumulativeProfitQuery.data.total_pnl === 0,
-              })}
+              className="text-emerald-800"
               weight="duotone"
             />
           </div>
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Profit & Loss
           </h3>
-          <span
-            className={clsx(
-              "justify-start text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider",
-              {
-                "text-gray-500": cumulativeProfitQuery.data.total_pnl === 0,
-                "text-emerald-700": cumulativeProfitQuery.data.total_pnl > 0,
-                "text-rose-600": cumulativeProfitQuery.data.total_pnl < 0,
-              }
-            )}
-          >
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {formatCurrency(cumulativeProfitQuery.data.total_pnl)}
           </span>
           <p className="truncate flex items-center gap-1">
             <span className="text-neutral-500 text-sm">
-              Across
-              <span className="text-gray-500 font-semibold mx-1 text-lg">
+              Across&nbsp;
+              <span className="text-emerald-500">
                 {cumulativeProfitQuery.data.total_positions}
               </span>
-              active positions
+              &nbsp; active positions
             </span>
           </p>
         </motion.div>
@@ -354,7 +333,7 @@ const AdminDashboard = () => {
           <h3 className="justify-start text-neutral-800/70 text-base font-medium">
             Strategies
           </h3>
-          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center tabular-nums gap-0.5 tracking-wider">
+          <span className="justify-start text-neutral-800 text-3xl font-bold flex items-center gap-0.5 tracking-wider">
             {new Intl.NumberFormat("en-IN", {
               notation: "compact",
               compactDisplay: "short",
