@@ -56,7 +56,7 @@ const expandedRowRender = (positions: Position[]) => {
               <div className="grid gap-3">
                 {isBuy && (
                   <div className="grid grid-cols-[auto_1fr] gap-1 text-gray-600">
-                    <span className="text-emerald-600 font-semibold uppercase tracking-wider text-xs  col-span-2   before:rounded-sm  relative before:absolute before:bottom-0 before:inset-x-0 before:h-px before:bg-emerald-500">
+                    <span className="text-emerald-700 font-semibold uppercase tracking-wider text-xs  col-span-2   before:rounded-sm  relative before:absolute before:bottom-0 before:inset-x-0 before:h-px before:bg-emerald-500">
                       Buy Order Details
                     </span>
                     <>
@@ -164,7 +164,7 @@ const expandedRowRender = (positions: Position[]) => {
         <span
           className={clsx("tabular-nums", {
             "text-gray-400": realised === 0,
-            "text-emerald-600": realised > 0,
+            "text-emerald-700": realised > 0,
             "text-rose-600": realised < 0,
           })}
         >
@@ -181,7 +181,7 @@ const expandedRowRender = (positions: Position[]) => {
         <span
           className={clsx("tabular-nums", {
             "text-gray-400": unrealised === 0,
-            "text-emerald-600": unrealised > 0,
+            "text-emerald-700": unrealised > 0,
             "text-rose-600": unrealised < 0,
           })}
         >
@@ -198,7 +198,7 @@ const expandedRowRender = (positions: Position[]) => {
         <span
           className={clsx("tabular-nums font-medium", {
             "text-gray-400": total_pnl === 0,
-            "text-emerald-600": total_pnl > 0,
+            "text-emerald-700": total_pnl > 0,
             "text-rose-600": total_pnl < 0,
           })}
         >
@@ -296,7 +296,7 @@ const BulkPositions = () => {
               <span
                 className={clsx("tabular-nums", {
                   "text-gray-400": realised_pnl === 0,
-                  "text-emerald-600": realised_pnl > 0,
+                  "text-emerald-700": realised_pnl > 0,
                   "text-rose-600": realised_pnl < 0,
                 })}
               >
@@ -313,7 +313,7 @@ const BulkPositions = () => {
               <span
                 className={clsx("tabular-nums", {
                   "text-gray-400": unrealised_pnl === 0,
-                  "text-emerald-600": unrealised_pnl > 0,
+                  "text-emerald-700": unrealised_pnl > 0,
                   "text-rose-600": unrealised_pnl < 0,
                 })}
               >
@@ -327,15 +327,15 @@ const BulkPositions = () => {
             key: "total_pnl",
             align: "end",
             render: ({ total_pnl }) => (
-              <Tag
+              <span
                 className={clsx("tabular-nums font-medium", {
-                  "bg-gray-400 text-gray-600": total_pnl === 0,
-                  "bg-emerald-500 text-white": total_pnl > 0,
-                  "bg-rose-500 text-white": total_pnl < 0,
+                  "text-gray-400": total_pnl === 0,
+                  "text-emerald-700": total_pnl > 0,
+                  "text-rose-600": total_pnl < 0,
                 })}
               >
                 {formatCurrency(total_pnl)}
-              </Tag>
+              </span>
             ),
           },
         ]}
