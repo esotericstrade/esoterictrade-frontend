@@ -38,7 +38,7 @@ const UserPosition = () => {
       dataIndex: "trading_symbol",
       key: "trading_symbol",
       render: (text, record) => (
-        <span className="font-semibold">
+        <span className="font-medium">
           {text}
           <span className="text-gray-400 font-normal text-xs ms-0.5">
             {record.exchange}
