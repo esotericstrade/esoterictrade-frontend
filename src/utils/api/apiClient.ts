@@ -1,12 +1,16 @@
+import useToaster from "@/components/toaster";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 // Environment variables
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
 
+type TToastInstance = ReturnType<typeof useToaster>;
+
 // Create a class for the API client
 class ApiClient {
   private axiosInstance: AxiosInstance;
+  private notification: TToastInstance | null = null;
 
   constructor() {
     this.axiosInstance = axios.create({
@@ -70,10 +74,21 @@ class ApiClient {
             return Promise.reject(refreshError);
           }
         }
+        // 🌟 Generic error notification
+        this.notification?.error("Request Failed", {
+          description:
+            error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong!",
+        });
 
         return Promise.reject(error);
       }
     );
+  }
+
+  public setNotificationInstance(instance: TToastInstance | null) {
+    this.notification = instance;
   }
 
   // Method to handle GET requests
@@ -88,7 +103,7 @@ class ApiClient {
   // Method to handle POST requests
   public async post<T>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T> {
     const response: AxiosResponse<T> = await this.axiosInstance.post(
@@ -102,7 +117,7 @@ class ApiClient {
   // Method to handle PUT requests
   public async put<T>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T> {
     const response: AxiosResponse<T> = await this.axiosInstance.put(
