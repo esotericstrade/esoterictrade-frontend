@@ -35,10 +35,11 @@ export const userAdminBrokerService = {
     return await apiClient.get<
       PaginatedResponse<{
         data: Array<{
-          positions: Position[];
+          positions: null | Position[];
           user_id: number;
           username: string;
           pnl_summary: PnLSummary;
+          error_message?: string;
         }>;
       }>
     >(`/api/admin-broker/kite/positions?page=${page}&size=${size}`);

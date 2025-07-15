@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import useToaster from "@/components/toaster";
+import { apiClient } from "@/utils/api/apiClient";
 import { authService } from "@/utils/api/auth/service";
 import { userService } from "@/utils/api/user/service";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 type TUser = {
   id: number;
@@ -29,6 +31,12 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useLocalStorage<TUser | null>("user", null);
   const [loading, setLoading] = useState(true);
+
+  const toaster = useToaster();
+
+  useEffect(() => {
+    apiClient.setNotificationInstance(toaster);
+  }, [toaster]);
 
   // Check if user is authenticated on page load
   useEffect(() => {

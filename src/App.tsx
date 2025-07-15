@@ -5,7 +5,13 @@ import AuthProvider from "./Pages/Auth/context";
 import router from "./Router";
 import { antdConfig } from "./utils/antd";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const App = () => {
   return (
