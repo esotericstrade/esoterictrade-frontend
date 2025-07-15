@@ -81,7 +81,11 @@ const BulkPositions = () => {
                 {username}
                 {record.error_message && (
                   <Tooltip title={record.error_message}>
-                    <Warning className="text-red-600" weight="bold" size={16} />
+                    <Warning
+                      className="text-rose-600"
+                      weight="bold"
+                      size={16}
+                    />
                   </Tooltip>
                 )}
               </div>
@@ -92,13 +96,23 @@ const BulkPositions = () => {
             dataIndex: "pnl_summary",
             key: "position_count",
             align: "end",
-            render: ({ position_count, losing_positions }) => (
-              <div className="inline-flex justify-end items-center tabular-nums">
-                <span className="text-rose-600">{losing_positions}</span>
-                <span className="mx-1 text-gray-400">/</span>
-                <span>{position_count}</span>
-              </div>
-            ),
+            render: ({ position_count, losing_positions }) =>
+              losing_positions > 0 ? (
+                <div className="inline-flex justify-end items-center tabular-nums">
+                  <span className="text-rose-700">
+                    {losing_positions} losing&nbsp;
+                  </span>
+                  / {position_count}
+                </div>
+              ) : (
+                <div className="inline-flex justify-end items-center tabular-nums">
+                  {position_count > 0 ? (
+                    <span className="text-emerald-700">{position_count}</span>
+                  ) : (
+                    <span className="text-gray-400">---</span>
+                  )}
+                </div>
+              ),
           },
           {
             title: "Realized PnL",
