@@ -8,7 +8,7 @@ import utc from "dayjs/plugin/utc";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
-const PAGE_LIMIT = 20;
+const PAGE_LIMIT = 100;
 
 dayjs.extend(utc);
 

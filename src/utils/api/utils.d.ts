@@ -1,6 +1,6 @@
 type PaginatedResponse<T> = T & {
   pagination: {
-    limit: number;
+    size: number;
     page: number;
     pages: number;
     total: number;

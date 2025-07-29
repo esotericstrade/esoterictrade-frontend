@@ -6,7 +6,7 @@ import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useState } from "react";
 
-const PAGE_LIMIT = 20;
+const PAGE_LIMIT = 100;
 
 const Strategies = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +19,7 @@ const Strategies = () => {
         pages: 0,
         total: 0,
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       },
       data: [],
     },

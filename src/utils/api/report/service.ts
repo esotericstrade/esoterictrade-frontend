@@ -15,7 +15,7 @@ export const reportService = {
           start_date: params.start_date,
           end_date: params.end_date,
           page: params.page || 1,
-          size: params.size || 20,
+          size: params.size || 200,
         },
       }
     );

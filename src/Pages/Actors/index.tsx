@@ -31,7 +31,7 @@ const Actors = () => {
     queryFn: () =>
       actorService.getAllActors({
         page: currentPage,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
         instrument: debouncedSearch || undefined,
         sort_by: sortField,
         sort_order: sortOrder,
@@ -41,7 +41,7 @@ const Actors = () => {
         pages: 0,
         total: 0,
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       },
       data: [],
     },

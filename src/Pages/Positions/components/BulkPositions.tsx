@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import UserPositionTable from "./PositionTable";
 
-const PAGE_LIMIT = 20;
+const PAGE_LIMIT = 100;
 
 const expandedRowRender = (positions: Position[]) => {
   return (

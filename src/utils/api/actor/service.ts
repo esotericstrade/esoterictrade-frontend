@@ -4,14 +4,14 @@ export const actorService = {
   getAllActors: async (
     param: {
       page: number;
-      limit: number;
+      size: number;
       strategyId?: number;
       instrument?: string;
       sort_by?: string;
       sort_order?: "asc" | "desc";
     } = {
       page: 1,
-      limit: 12,
+      size: 12,
     }
   ) => {
     return await apiClient.get<PaginatedResponse<{ data: Actor[] }>>(
@@ -19,7 +19,7 @@ export const actorService = {
       {
         params: {
           page: param.page,
-          limit: param.limit,
+          size: param.size,
           strategy_id: param.strategyId,
           instrument: param.instrument,
           sort_by: param.sort_by,

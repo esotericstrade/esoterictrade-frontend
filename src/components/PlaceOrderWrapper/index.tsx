@@ -24,7 +24,7 @@ type PlaceOrderWrapperProps = {
 
 type TFormValues = BaseWebhookPayload;
 
-const PAGE_LIMIT = 500;
+const PAGE_LIMIT = 100;
 
 const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
     queryFn: () =>
       actorService.getAllActors({
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       }),
     enabled: open,
     initialData: {
@@ -72,7 +72,7 @@ const PlaceOrderWrapper = ({ children }: PlaceOrderWrapperProps) => {
         pages: 0,
         total: 0,
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       },
       data: [],
     },

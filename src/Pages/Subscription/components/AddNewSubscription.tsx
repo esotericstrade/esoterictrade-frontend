@@ -7,7 +7,7 @@ import { Button, DatePicker, Form, InputNumber, Modal, Select } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-const PAGE_LIMIT = 500;
+const PAGE_LIMIT = 100;
 
 const AddNewSubscription: React.FC<{
   children: ({
@@ -34,14 +34,14 @@ const AddNewSubscription: React.FC<{
     queryFn: () =>
       actorService.getAllActors({
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       }),
     initialData: {
       pagination: {
         pages: 0,
         total: 0,
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       },
       data: [],
     },
@@ -63,7 +63,7 @@ const AddNewSubscription: React.FC<{
         pages: 0,
         total: 0,
         page: 1,
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
       },
       data: [],
     },

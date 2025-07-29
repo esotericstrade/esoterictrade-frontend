@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import UserFormModal from "./UserFormModal";
 
-const PAGE_LIMIT = 20;
+const PAGE_LIMIT = 100;
 
 const Users = () => {
   const queryClient = useQueryClient();
@@ -54,7 +54,7 @@ const Users = () => {
       }),
     initialData: {
       pagination: {
-        limit: PAGE_LIMIT,
+        size: PAGE_LIMIT,
         page: currentPage,
         total: 0,
         pages: 0,
