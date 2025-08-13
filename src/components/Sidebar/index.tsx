@@ -11,199 +11,289 @@ import {
   Plus,
   SignOut,
   Smiley,
+  Target,
   UserCircle,
   Users,
   WaveTriangle,
 } from "@phosphor-icons/react";
-import { Button, Divider, Menu } from "antd";
+import { Button, Menu } from "antd";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PlaceOrderWrapper from "../PlaceOrderWrapper";
+import GTTManagement from "../GTTManagement";
 
-const MENU_ITEMS = [
+// Define menu item type with optional role restrictions
+type MenuItem = {
+  key: string;
+  icon: any;
+  label: string;
+  href: string;
+  roles?: Array<"admin"|"readonly_admin"|"user">; // If not specified, available to all
+};
+
+const ALL_MENU_ITEMS: MenuItem[] = [
   {
     key: "dashboard",
     icon: House,
     label: "Dashboard",
     href: "/dashboard",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "users",
     icon: Users,
     label: "Users",
     href: "/users",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "actors",
     icon: Lightning,
     label: "Actors",
     href: "/actors",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "strategies",
     icon: CardsThree,
     label: "Strategies",
     href: "/strategies",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "brokers",
     icon: Users,
     label: "Brokers",
     href: "/brokers",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "reports",
     icon: ChartBar,
     label: "Reports",
     href: "/reports/trade",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "positions",
     icon: WaveTriangle,
     label: "Positions",
     href: "/positions",
+    roles: ["admin","readonly_admin","user"]
   },
   {
     key: "orders",
     icon: Cube,
     label: "Orders",
     href: "/orders",
+    roles: ["admin","readonly_admin"], // Admin only
   },
   {
     key: "analytics",
     icon: ChartBar,
     label: "Analytics",
     href: "/analytics",
+    roles: ["admin","readonly_admin"], // Admin only
   },
-] as const;
+];
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { onLogout, user } = useAuthContext();
   const [open, setOpen] = useState(false);
-  const [activeStep, setActiveStep] =
-    useState<(typeof MENU_ITEMS)[number]["key"]>("dashboard");
+  const [activeStep, setActiveStep] = useState<string>("dashboard");
+
+  // Filter menu items based on user role
+  const filteredMenuItems = useMemo(() => {
+    if (!user) return [];
+
+    return ALL_MENU_ITEMS.filter((item) => {
+      // If no roles specified, item is available to all
+      if (!item.roles || item.roles.length === 0) {
+        return true;
+      }
+      // Check if user's role is in the allowed roles
+      return item.roles.includes(user.role);
+    });
+  }, [user]);
 
   useEffect(() => {
     const currentPath = location.pathname;
-    const currentItem = MENU_ITEMS.find((item) =>
+    const currentItem = filteredMenuItems.find((item) =>
       currentPath.startsWith(item.href)
     );
+    
     if (currentItem) {
       setActiveStep(currentItem.key);
-    } else {
-      setActiveStep("dashboard"); // Default to dashboard if no match found
+    } else if (filteredMenuItems.length > 0) {
+      // If current path doesn't match any menu item, default to first available item
+      setActiveStep(filteredMenuItems[0].key);
+      
+      // For non-admin users, redirect to positions if they try to access admin routes
+      if (user?.role === "user" && !currentItem) {
+        navigate("/positions");
+      }
     }
-  }, [location.pathname]);
+  }, [location.pathname, filteredMenuItems, user, navigate]);
+
+  // Hide action buttons for non-admin users
+  const showActionButtons = user?.role === "admin";
 
   return (
-    <aside className="w-[220px] bg-white px-4 py-5 overflow-y-auto flex flex-col h-[calc(100vh-70px)]">
-      <PlaceOrderWrapper>
-        {({ setOpen }) => (
-          <Button
-            type="primary"
-            block
-            icon={<Plus size={16} />}
-            children="Place order"
-            onClick={() => setOpen(true)}
-          />
-        )}
-      </PlaceOrderWrapper>
-
-      <Divider className="my-3" />
-
-      <Menu
-        selectedKeys={[activeStep]}
-        items={MENU_ITEMS.map(({ key, icon: Icon, label, href }) => ({
-          key,
-          icon: <Icon size={16} weight="duotone" />,
-          label,
-          onClick: () => navigate(href),
-        }))}
-      />
-      <Divider className="my-3" />
-
-      <div className="mt-auto">
-        <hr className="mb-3 border-gray-200" />
-
-        <div className={clsx("w-full")}>
-          <div
-            role="button"
-            onClick={() => setOpen((prev) => !prev)}
-            className={clsx(
-              "group grid grid-rows-[1fr] items-center rounded-lg bg-white py-1.5 shadow-[0px_0px_0px_1px_#dadadd] transition-[grid-template-rows,max-height,opacity] duration-300 ease-in-2 hover:bg-gray-50",
-              open && "grid-rows-[1fr_auto]"
+    <aside className="w-[260px] bg-white shadow-sm px-4 py-6 overflow-y-auto flex flex-col h-[calc(100vh-70px)]">
+      {/* Action Buttons Section - Only for Admins */}
+      {showActionButtons && (
+        <div className="space-y-2 mb-6">
+          <PlaceOrderWrapper>
+            {({ setOpen }) => (
+              <Button
+                type="primary"
+                size="large"
+                block
+                icon={<Plus size={18} weight="bold" />}
+                onClick={() => setOpen(true)}
+                className="h-11 font-medium shadow-sm hover:shadow-md transition-shadow"
+              >
+                Place Order
+              </Button>
             )}
+          </PlaceOrderWrapper>
+          
+          <Button
+            type="default"
+            size="large"
+            block
+            icon={<Target size={18} weight="bold" />}
+            onClick={() => {
+              // GTT Management functionality
+              const gttButton = document.querySelector('#gtt-trigger-button');
+              if (gttButton) {
+                (gttButton as HTMLButtonElement).click();
+              }
+            }}
+            className="h-11 font-medium border-primary-600 text-primary-600 hover:bg-primary-50 hover:border-primary-700"
           >
-            <div className="flex items-center px-2">
+            GTT Orders
+          </Button>
+          
+          {/* Hidden GTT Management Component */}
+          <div className="hidden">
+            <GTTManagement />
+          </div>
+        </div>
+      )}
+
+      {/* Navigation Section */}
+      <div className="flex-1">
+        {showActionButtons && (
+          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-3">
+            Navigation
+          </div>
+        )}
+        
+        <Menu
+          selectedKeys={[activeStep]}
+          className="border-0"
+          items={filteredMenuItems.map(({ key, icon: Icon, label, href }) => ({
+            key,
+            icon: <Icon size={20} weight="duotone" />,
+            label,
+            onClick: () => navigate(href),
+            className: "rounded-lg mb-1 transition-all duration-200",
+          }))}
+          style={{
+            background: "transparent",
+          }}
+        />
+      </div>
+
+      {/* User Profile Section */}
+      <div className="mt-auto pt-4 border-t border-gray-100">
+        <div
+          role="button"
+          onClick={() => setOpen((prev) => !prev)}
+          className={clsx(
+            "w-full rounded-xl transition-all duration-300",
+            open ? "bg-gray-50 shadow-sm" : "hover:bg-gray-50"
+          )}
+        >
+          <div className="flex items-center px-3 py-2.5">
+            <div className="relative">
               <UserCircle
                 weight="fill"
-                className="mx-auto text-primary-600"
-                size={18}
+                className="text-primary-600"
+                size={36}
               />
-              <div
-                className={clsx(
-                  "ms-2.5 flex flex-1 items-center gap-1.5 overflow-hidden transition-all duration-300 ease-in-2",
-                  "max-w-[160px] scale-x-100 opacity-100"
-                )}
-                style={{ transformOrigin: "left" }}
-              >
-                <p className="flex-1 truncate text-left text-[13px] font-medium text-[#42424a]">
-                  {user?.first_name} {user?.last_name}
-                </p>
-                <CaretDown
-                  weight="fill"
-                  size={16}
-                  className={clsx(
-                    "text-gray-500  transition-transform duration-300 ease-in-2",
-                    open && "rotate-180"
-                  )}
-                />
-              </div>
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
             </div>
-            <div
+            <div className="flex-1 ml-3 overflow-hidden">
+              <p className="text-sm font-semibold text-gray-800 truncate">
+                {user?.first_name} {user?.last_name}
+              </p>
+              <p className="text-xs text-gray-500 capitalize">
+                {user?.role}
+              </p>
+            </div>
+            <CaretDown
+              weight="bold"
+              size={16}
               className={clsx(
-                "grid max-h-0 gap-2 overflow-hidden opacity-0 transition-[max-height,opacity] duration-300 ease-in-2",
-                open && "max-h-40 opacity-100"
+                "text-gray-400 transition-transform duration-300 ml-2",
+                open && "rotate-180"
               )}
-            >
-              <hr className="mx-2 mt-2 border-gray-200" />
+            />
+          </div>
+          
+          {/* Dropdown Menu */}
+          <div
+            className={clsx(
+              "overflow-hidden transition-all duration-300",
+              open ? "max-h-48 pb-2" : "max-h-0"
+            )}
+          >
+            <div className="px-2 pt-2">
               <Menu
                 selectedKeys={[]}
+                className="border-0"
                 items={[
+                  {
+                    key: "settings",
+                    icon: <Gear size={18} weight="duotone" />,
+                    label: "Settings",
+                    onClick: () => navigate("/settings"),
+                    className: "rounded-lg mb-1",
+                  },
+                  {
+                    key: "help",
+                    icon: <Headset size={18} weight="duotone" />,
+                    label: "Help & Support",
+                    onClick: () => navigate("/help-and-support"),
+                    className: "rounded-lg mb-1",
+                  },
+                  {
+                    key: "community",
+                    icon: <Smiley size={18} weight="duotone" />,
+                    label: "Community",
+                    onClick: () => navigate("/community"),
+                    className: "rounded-lg mb-1",
+                  },
+                  {
+                    type: "divider",
+                  },
                   {
                     key: "logout",
                     icon: (
                       <SignOut
-                        size={16}
+                        size={18}
                         weight="duotone"
-                        className="!fill-red-500"
+                        className="text-red-500"
                       />
                     ),
                     label: "Logout",
                     onClick: onLogout,
-                    className:
-                      "!text-red-600 hover:!bg-red-100 [&.ant-menu-item-selected]:!bg-red-600",
-                  },
-                  {
-                    key: "settings",
-                    icon: <Gear size={16} weight="duotone" />,
-                    label: "Settings",
-                    onClick: () => navigate("/settings"),
-                  },
-                  {
-                    key: "help",
-                    icon: <Headset size={16} weight="duotone" />,
-                    label: "Help & support",
-                    onClick: () => navigate("/help-and-support"),
-                  },
-                  {
-                    key: "community",
-                    icon: <Smiley size={16} weight="duotone" />,
-                    label: "Community",
-                    onClick: () => navigate("/community"),
+                    className: "rounded-lg text-red-600 hover:!bg-red-50",
                   },
                 ]}
               />

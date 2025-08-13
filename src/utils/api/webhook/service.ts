@@ -41,14 +41,14 @@ export const webhookService = {
    * Update GTT webhook
    */
   updateGTT: async (data: GTTWebhookPayload): Promise<WebhookResponse> => {
-    return await apiClient.post<WebhookResponse>("/webhook/update_gtt", data);
+    return await apiClient.post<WebhookResponse>("/api/webhook/update-gtt", data);
   },
 
   /**
    * Create GTT webhook
    */
   createGTT: async (data: GTTWebhookPayload): Promise<WebhookResponse> => {
-    return await apiClient.post<WebhookResponse>("/webhook/create_gtt", data);
+    return await apiClient.post<WebhookResponse>("/api/webhook/create_gtt", data);
   },
 
   /**

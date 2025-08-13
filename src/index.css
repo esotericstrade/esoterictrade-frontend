@@ -8,3 +8,58 @@
 * {
   @apply m-0 p-0 box-border font-inter;
 }
+
+/* Add these styles to your global CSS file or create a Sidebar.module.css */
+
+/* Sidebar Menu Styles */
+.ant-menu-item {
+  margin-bottom: 3px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ant-menu-item:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #ede9fe !important;
+  color: #7c3aed !important;
+}
+
+.ant-menu-item-selected::after {
+  display: none !important;
+}
+
+.ant-menu-item .ant-menu-item-icon {
+  font-size: 20px !important;
+  margin-right: 12px !important;
+}
+
+/* Button Styles Enhancement */
+.ant-btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2) !important;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%) !important;
+  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+/* User Profile Dropdown Enhancement */
+.ant-menu-submenu-popup {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}

@@ -21,7 +21,7 @@ export const actorService = {
           page: param.page,
           size: param.size,
           strategy_id: param.strategyId,
-          instrument: param.instrument,
+          instrument_name: param.instrument,
           sort_by: param.sort_by,
           sort_order: param.sort_order,
         },

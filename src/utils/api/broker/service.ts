@@ -19,11 +19,10 @@ export const userAdminBrokerService = {
     );
   },
   getCurrentUserPositions: async () => {
-    return (
-      await apiClient.get<{ positions: Position[] }>(
-        `/api/user-broker/kite/positions`
-      )
-    ).positions;
+    const positions = await apiClient.get<Position[]>(
+      `/api/user-broker/kite/positions`
+    );
+    return positions;
   },
   getCurrentUserHoldings: async () => {
     return await apiClient.get<Holding[]>(`/api/user-broker/kite/holdings`);

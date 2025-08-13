@@ -1,8 +1,8 @@
 .tradeco-button {
-  @apply h-9 flex justify-center items-center relative px-4 py-3 rounded-full shadow-[0.625rem_0.625rem_0.875rem_0_rgb(225,226,228),-0.5rem_-0.5rem_1.125rem_0_rgb(255,255,255)];
+  @apply h-9 flex justify-center items-center relative px-4 py-3 rounded-full shadow-[];
 
   &.ant-btn-lg {
-    @apply h-16;
+    @apply h-10;
   }
 
   &.ant-btn-sm {
@@ -19,7 +19,7 @@
   }
 
   &.ant-input-lg {
-    @apply h-14;
+    @apply h-12;
   }
 }
 
